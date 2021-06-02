@@ -14,7 +14,7 @@ project Adabots is
    for Object_Dir use "obj";
    for Create_Missing_Dirs use "True";
    for Exec_Dir use "bin";
-   for Main use ("adabots.adb");
+   for Main use ("main.adb");
 
    type Enabled_Kind is ("enabled", "disabled");
    Compile_Checks : Enabled_Kind := External ("ADABOTS_COMPILE_CHECKS", "enabled");
@@ -80,6 +80,7 @@ project Adabots is
         Style_Checks_Switches &
         Contracts_Switches &
         ("-gnatw.X", -- Disable warnings for No_Exception_Propagation
+         "-gnatw_A", -- Disable warning: use of an anonymous access type allocator [enabled by default]
          "-gnatQ");  -- Don't quit. Generate ALI and tree files even if illegalities
    end Compiler;
 

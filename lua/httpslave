@@ -11,9 +11,17 @@ while true do
   until request
 
   local command = request.readAll()
-  print(command)
-  local functor = loadstring(command)
-  functor()
+  local functor = loadstring("return(" .. command .. ")")
+
+  local result = nil
+  if functor then
+    result = tostring(functor())
+  else
+    result = "error: invalid lua expression"
+  end
+  print(command .. " returned " .. result)
+
+  http.get(server .. "return_value/" .. result)
 
   request.close()
 
