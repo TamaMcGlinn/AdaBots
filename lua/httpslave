@@ -1,0 +1,20 @@
+local server = "http://localhost:7112/"
+
+while true do
+
+  local request = nil
+  repeat
+    request = http.get(server)
+    if not request then
+      os.sleep(1)
+    end
+  until request
+
+  local command = request.readAll()
+  print(command)
+  local functor = loadstring(command)
+  functor()
+
+  request.close()
+
+end
