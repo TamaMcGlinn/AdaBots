@@ -8,6 +8,14 @@ package Adabots is
    function Create_Turtle (Port : Integer := 7_112) return Turtle;
 
    function Turn_Right (T : Turtle) return Boolean;
+   function Turn_Left (T : Turtle) return Boolean;
+   function Forward (T : Turtle) return Boolean;
+   function Back (T : Turtle) return Boolean;
+   function Up (T : Turtle) return Boolean;
+   function Down (T : Turtle) return Boolean;
+   function Dig_Down (T : Turtle) return Boolean;
+   function Dig_Up (T : Turtle) return Boolean;
+   function Dig (T : Turtle) return Boolean;
 
 private
 
@@ -24,4 +32,9 @@ private
    end record;
 
    overriding procedure Finalize (T : in out Turtle);
+
+   function Raw_Function (T : Turtle; Lua_Code : String) return String;
+
+   function Boolean_Function (T : Turtle; Lua_Code : String) return Boolean;
+
 end Adabots;

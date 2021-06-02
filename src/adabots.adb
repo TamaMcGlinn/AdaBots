@@ -12,17 +12,49 @@ package body Adabots is
    end Create_Turtle;
 
    function Turn_Right (T : Turtle) return Boolean is
-      Returned_String : Unbounded_String;
    begin
-      T.Server.Schedule_Command ("turtle.turnRight()");
-      T.Server.Get_Result (Returned_String);
-      if Returned_String = "true" then
-         return True;
-      elsif Returned_String = "false" then
-         return False;
-      end if;
-      raise Program_Error with To_String (Returned_String);
+      return Boolean_Function (T, "turtle.turnRight()");
    end Turn_Right;
+
+   function Turn_Left (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.turnLeft()");
+   end Turn_Left;
+
+   function Forward (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.forward()");
+   end Forward;
+
+   function Back (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.back()");
+   end Back;
+
+   function Up (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.up()");
+   end Up;
+
+   function Down (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.down()");
+   end Down;
+
+   function Dig_Down (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.digDown()");
+   end Dig_Down;
+
+   function Dig_Up (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.digUp()");
+   end Dig_Up;
+
+   function Dig (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.dig()");
+   end Dig;
 
    overriding procedure Finalize (T : in out Turtle) is
    begin
@@ -128,5 +160,24 @@ package body Adabots is
          Ada.Text_IO.Put_Line (Ada.Exceptions.Exception_Information (Error));
          Ada.Text_IO.Skip_Line;
    end Command_Server;
+
+   function Raw_Function (T : Turtle; Lua_Code : String) return String is
+      Returned_String : Unbounded_String;
+   begin
+      T.Server.Schedule_Command (Lua_Code);
+      T.Server.Get_Result (Returned_String);
+      return To_String (Returned_String);
+   end Raw_Function;
+
+   function Boolean_Function (T : Turtle; Lua_Code : String) return Boolean is
+      Returned_String : constant String := T.Raw_Function (Lua_Code);
+   begin
+      if Returned_String = "true" then
+         return True;
+      elsif Returned_String = "false" then
+         return False;
+      end if;
+      raise Program_Error with Returned_String;
+   end Boolean_Function;
 
 end Adabots;
