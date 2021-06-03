@@ -33,12 +33,23 @@ package Adabots is
    procedure Back (T : Turtle);
    procedure Up (T : Turtle);
    procedure Down (T : Turtle);
+
    procedure Dig_Down (T : Turtle);
    procedure Dig_Up (T : Turtle);
    procedure Dig (T : Turtle);
+
    procedure Place (T : Turtle);
    procedure Place_Down (T : Turtle);
    procedure Place_Up (T : Turtle);
+
+   --   these procedures don't care what the result is
+
+   procedure Maybe_Dig_Down (T : Turtle);
+   procedure Maybe_Dig_Up (T : Turtle);
+   procedure Maybe_Dig (T : Turtle);
+   procedure Maybe_Place (T : Turtle);
+   procedure Maybe_Place_Down (T : Turtle);
+   procedure Maybe_Place_Up (T : Turtle);
 
 private
 

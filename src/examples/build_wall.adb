@@ -1,7 +1,7 @@
 with Ada.Text_IO;
 with Adabots;
 
-procedure Main is
+procedure Build_Wall is
    Robot : constant Adabots.Turtle := Adabots.Create_Turtle;
 begin
 
@@ -9,6 +9,7 @@ begin
    loop
       exit when Robot.Down = False;
    end loop;
+
    --  One back up
    Robot.Up;
 
@@ -17,4 +18,11 @@ begin
    Robot.Turn_Left;
 
    --  Build wall backwards
-end Main;
+   for Wall_Index in 1 .. 5 loop
+      Robot.Place_Down;
+      Robot.Place_Up;
+      Robot.Back;
+      Robot.Place;
+   end loop;
+
+end Build_Wall;

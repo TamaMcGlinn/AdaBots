@@ -159,6 +159,42 @@ package body Adabots is
       end if;
    end Place_Up;
 
+   procedure Maybe_Dig_Down (T : Turtle) is
+      Result : constant Boolean := Dig_Down (T);
+   begin
+      null;
+   end Maybe_Dig_Down;
+
+   procedure Maybe_Dig_Up (T : Turtle) is
+      Result : constant Boolean := Dig_Up (T);
+   begin
+      null;
+   end Maybe_Dig_Up;
+
+   procedure Maybe_Dig (T : Turtle) is
+      Result : constant Boolean := Dig (T);
+   begin
+      null;
+   end Maybe_Dig;
+
+   procedure Maybe_Place (T : Turtle) is
+      Result : constant Boolean := Place (T);
+   begin
+      null;
+   end Maybe_Place;
+
+   procedure Maybe_Place_Down (T : Turtle) is
+      Result : constant Boolean := Place_Down (T);
+   begin
+      null;
+   end Maybe_Place_Down;
+
+   procedure Maybe_Place_Up (T : Turtle) is
+      Result : constant Boolean := Place_Up (T);
+   begin
+      null;
+   end Maybe_Place_Up;
+
    --  private:
 
    overriding procedure Finalize (T : in out Turtle) is
