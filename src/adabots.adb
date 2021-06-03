@@ -4,6 +4,9 @@ with AWS.Server;
 with AWS.MIME;
 
 package body Adabots is
+
+   --  public:
+
    function Create_Turtle (Port : Integer := 7_112) return Turtle is
    begin
       return
@@ -11,14 +14,14 @@ package body Adabots is
          Server => new Command_Server (Port));
    end Create_Turtle;
 
-   function Turn_Right (T : Turtle) return Boolean is
+   procedure Turn_Right (T : Turtle) is
    begin
-      return Boolean_Function (T, "turtle.turnRight()");
+      Turtle_Procedure (T, "turtle.turnRight()");
    end Turn_Right;
 
-   function Turn_Left (T : Turtle) return Boolean is
+   procedure Turn_Left (T : Turtle) is
    begin
-      return Boolean_Function (T, "turtle.turnLeft()");
+      Turtle_Procedure (T, "turtle.turnLeft()");
    end Turn_Left;
 
    function Forward (T : Turtle) return Boolean is
@@ -56,6 +59,108 @@ package body Adabots is
       return Boolean_Function (T, "turtle.dig()");
    end Dig;
 
+   function Place (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.place()");
+   end Place;
+
+   function Place_Down (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.placeDown()");
+   end Place_Down;
+
+   function Place_Up (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.placeUp()");
+   end Place_Up;
+
+   procedure Select_Slot (T : Turtle; Slot : Turtle_Inventory_Slot) is
+   begin
+      Turtle_Procedure (T, "turtle.select()");
+   end Select_Slot;
+
+   procedure Forward (T : Turtle) is
+      Result : constant Boolean := Forward (T);
+   begin
+      if Result = False then
+         raise Program_Error with "Turtle.Forward returned False";
+      end if;
+   end Forward;
+
+   procedure Back (T : Turtle) is
+      Result : constant Boolean := Back (T);
+   begin
+      if Result = False then
+         raise Program_Error with "Turtle.Back returned False";
+      end if;
+   end Back;
+
+   procedure Up (T : Turtle) is
+      Result : constant Boolean := Up (T);
+   begin
+      if Result = False then
+         raise Program_Error with "Turtle.Up returned False";
+      end if;
+   end Up;
+
+   procedure Down (T : Turtle) is
+      Result : constant Boolean := Down (T);
+   begin
+      if Result = False then
+         raise Program_Error with "Turtle.Down returned False";
+      end if;
+   end Down;
+
+   procedure Dig_Down (T : Turtle) is
+      Result : constant Boolean := Dig_Down (T);
+   begin
+      if Result = False then
+         raise Program_Error with "Turtle.Dig_Down returned False";
+      end if;
+   end Dig_Down;
+
+   procedure Dig_Up (T : Turtle) is
+      Result : constant Boolean := Dig_Up (T);
+   begin
+      if Result = False then
+         raise Program_Error with "Turtle.Dig_Up returned False";
+      end if;
+   end Dig_Up;
+
+   procedure Dig (T : Turtle) is
+      Result : constant Boolean := Dig (T);
+   begin
+      if Result = False then
+         raise Program_Error with "Turtle.Dig returned False";
+      end if;
+   end Dig;
+
+   procedure Place (T : Turtle) is
+      Result : constant Boolean := Place (T);
+   begin
+      if Result = False then
+         raise Program_Error with "Turtle.Place returned False";
+      end if;
+   end Place;
+
+   procedure Place_Down (T : Turtle) is
+      Result : constant Boolean := Place_Down (T);
+   begin
+      if Result = False then
+         raise Program_Error with "Turtle.Place_Down returned False";
+      end if;
+   end Place_Down;
+
+   procedure Place_Up (T : Turtle) is
+      Result : constant Boolean := Place_Up (T);
+   begin
+      if Result = False then
+         raise Program_Error with "Turtle.Place_Up returned False";
+      end if;
+   end Place_Up;
+
+   --  private:
+
    overriding procedure Finalize (T : in out Turtle) is
    begin
       T.Server.Shutdown;
@@ -72,6 +177,12 @@ package body Adabots is
         Pattern'Length <= Source'Length
         and then Source (Source'First .. Pattern'Length) = Pattern;
    end Starts_With;
+
+   function Strip_Prefix (Source, Prefix : String) return String;
+   function Strip_Prefix (Source, Prefix : String) return String is
+   begin
+      return Source (Source'First + Prefix'Length .. Source'Last);
+   end Strip_Prefix;
 
    task body Command_Server is
       HTTP_Server     : AWS.Server.HTTP;
@@ -90,17 +201,10 @@ package body Adabots is
             return
               AWS.Response.Build (AWS.MIME.Text_Plain, To_String (Command));
          elsif Starts_With (URI, Return_Value_Prefix) then
-            declare
-               Return_Value_Start : constant Natural :=
-                 URI'First + Return_Value_Prefix'Length;
-               Return_Value : constant String :=
-                 URI (Return_Value_Start .. URI'Last);
-            begin
-               Push_Return_Value (Return_Value);
-               return
-                 AWS.Response.Build
-                   (AWS.MIME.Text_Plain, To_Unbounded_String (""));
-            end;
+            Push_Return_Value (Strip_Prefix (URI, Return_Value_Prefix));
+            return
+              AWS.Response.Build
+                (AWS.MIME.Text_Plain, To_Unbounded_String (""));
          end if;
          return
            AWS.Response.Build
@@ -166,7 +270,14 @@ package body Adabots is
    begin
       T.Server.Schedule_Command (Lua_Code);
       T.Server.Get_Result (Returned_String);
-      return To_String (Returned_String);
+      declare
+         String_Result : constant String := To_String (Returned_String);
+      begin
+         if Starts_With (String_Result, "error: ") then
+            raise Program_Error with String_Result;
+         end if;
+         return String_Result;
+      end;
    end Raw_Function;
 
    function Boolean_Function (T : Turtle; Lua_Code : String) return Boolean is
@@ -179,5 +290,21 @@ package body Adabots is
       end if;
       raise Program_Error with Returned_String;
    end Boolean_Function;
+
+   function String_Function (T : Turtle; Lua_Code : String) return String is
+      Returned_String    : constant String := T.Raw_Function (Lua_Code);
+      String_Type_Prefix : constant String := "string: ";
+   begin
+      if Starts_With (Returned_String, String_Type_Prefix) then
+         return Strip_Prefix (Returned_String, String_Type_Prefix);
+      end if;
+      raise Program_Error with Returned_String;
+   end String_Function;
+
+   procedure Turtle_Procedure (T : Turtle; Lua_Code : String) is
+      Discarded_Return_Value : String := Raw_Function (T, Lua_Code);
+   begin
+      null;
+   end Turtle_Procedure;
 
 end Adabots;
