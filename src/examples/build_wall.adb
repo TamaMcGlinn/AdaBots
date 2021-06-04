@@ -18,7 +18,7 @@ begin
    Robot.Turn_Left;
 
    --  Build wall backwards
-   for Wall_Index in 1 .. 5 loop
+   for Wall_Index in 1 .. 3 loop
       Robot.Place_Down;
       Robot.Place_Up;
       Robot.Back;
