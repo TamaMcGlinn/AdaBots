@@ -3,16 +3,25 @@
 The computercraft mod for Minecraft adds programmable robots called turtles,
 which can move around, dig tunnels, build walls and interact with anything in-game.
 
+This repository intends to teach children and adults alike the Ada programming language.
+If your child cannot read yet, I recommend you start him/her on
+[DoBots](http://github.com/TamaMcGlinn/DoBots) first.
+
 It is possible to use the small terminal window in-game and the built-in scripting
 language Lua to write programs, but I wanted to make this easier. This is a standalone
 program you can run on your computer locally, outside of minecraft, which issues commands
 to the in-game turtles. This means you can use a real programming environment, with
-code-completion, a debugger, static-analysis and mathematical proofs of program correctness.
+code-completion, a debugger, static-analysis and even mathematical proofs of program
+correctness.
 
 ## Ada
 
 Ada is a very safe, easy to learn language. It was designed from the ground up to be easy
-to understand, and difficult to make mistakes in.
+to understand, and difficult to make mistakes in. It is case-insensitive, disallows assignment
+inside conditional statements, has explicit `end if;`, `end loop;` etc. instead of the popular
+but confusing `}` in most programming languages. The tasking and rendez-vous idiom supported
+by Ada is far easier than the explicit locks and threading prevalent in the software industry,
+and makes it very difficult to create data-races 
 
 Program Text               |  Demo
 :-------------------------:|:-------------------------:
@@ -24,7 +33,12 @@ On the minecraft side of things, you need the following one-time setup:
 
 1) Choose latest versions of the following that work together
 
-Currently that is Minecraft 1.16.4, CC:Tweaked 
+Note: If you already installed [DoBots](http://github.com/TamaMcGlinn/DoBots), that should work fine for AdaBots as well. You only need to
+do step 6 - Configure computercraft to allow http.
+
+Currently that is Minecraft and
+[Minecraft Forge 1.16.4](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.4.html)
+with [CC:Tweaked 1.96.0](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked/files)
 
 2) Install [minecraft](https://minecraft.net/)
 
@@ -32,8 +46,12 @@ You will need to purchase the game.
 
 3) Install [minecraft forge](https://files.minecraftforge.net/net/minecraftforge/forge/)
 
-Download the installer for your operating system and minecraft version. After running it,
-select the forge game version in the launcher and press play, letting it load until you
+Download the installer for your operating system and minecraft version. Run it:
+
+- on linux, issue `java -jar ~/Downloads/forge-*.jar` on the terminal
+- on windows or mac, double-click the jar file
+
+Select the forge game version in the launcher and press play, letting it load until you
 are presented with the main game menu.
 
 4) Install [CC:Tweaked](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked)
@@ -48,11 +66,23 @@ It contains mods/, and you should put the cc-tweaked .jar file in there and rest
 
 5) Give yourself a turtle in-game
 
-I recommend you create a survival mode world set to peaceful with cheats enabled. If so,
-you can type `/give [yourname] computercraft:turtle_normal` (with tab-completion). Place it
-and right click it to open an in-game terminal on the turtle.
+I recommend you create a survival mode world set to peaceful with cheats enabled. 
+You may also wish to enter these commands in-game to avoid distractions:
 
-6) Configure computercraft to allow http
+```
+/gamerule doDayNightCycle off
+/time set day
+/weather off
+/weather clear
+```
+
+With cheats enabled, you can type `/give [yourname] computercraft:turtle_normal` (with tab-completion).
+Place it and right click it to open an in-game terminal on the turtle. Issue this command to give
+the turtle a name, and also to create the turtle's program directory:
+
+```
+label set [name]
+```
 
 Inside the minecraft directory, edit saves/[save_name]/serverconfig/computercraft-server.toml:
 
@@ -63,16 +93,12 @@ Inside the minecraft directory, edit saves/[save_name]/serverconfig/computercraf
 
 In the minecraft directory, under saves/[save_name]/computercraft/computer/ there is a numbered
 directory for every turtle in computercraft. You can copy lua/httpslave into that directory,
-and then issue `httpslave` on the turtle's terminal. If you name the program startup instead,
-you won't need to issue any command on the turtle terminal, it will start the program automatically.
-
-During development you may instead wish to symlink into this repository, so that the script
-automatically updates on the turtle. For instance:
+and then issue `httpslave` on the turtle's terminal. It will ask for an IP and port to listen to;
+press enter for the default. If you want multiple turtles, give each a different port in your
+Ada program like so:
 
 ```
-ln -s $PWD/lua/httpslave ~/.minecraft/saves/cctweaked_mc1_16_4/computercraft/computer/0/httpslave
-(or)
-ln -s $PWD/lua/httpslave ~/.minecraft/saves/cctweaked_mc1_16_4/computercraft/computer/0/startup
+
 ```
 
 ## Ada environment

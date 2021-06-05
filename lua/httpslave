@@ -1,4 +1,19 @@
-local server = "http://localhost:7112/"
+local default_server = "http://localhost:7112/"
+
+print("")
+print("Please enter a listen URL")
+print("It should be [IP_address]:[port]")
+print("Where IP_address is the IP of the")
+print("computer running an Adabots program")
+print("The port is in your Ada program")
+print("Just press enter for the default:")
+print(default_server)
+print("")
+
+local server = read()
+if server == "" then
+  server = default_server
+end
 
 while true do
 
