@@ -34,9 +34,10 @@ On the minecraft side of things, you need the following one-time setup:
 1) Choose latest versions of the following that work together
 
 Note: If you already installed [DoBots](http://github.com/TamaMcGlinn/DoBots), that should work fine for AdaBots as well. You only need to
-do step 6 - Configure computercraft to allow http.
+do step 6 - Configure computercraft to allow http. DoBots uses a slightly older version of Minecraft in order to support Plethora for
+keyboards - while AdaBots doesn't use keyboards, you may still want to use Plethora for its other peripherals.
 
-Currently that is Minecraft and
+Currently the latest supported version is Minecraft and
 [Minecraft Forge 1.16.4](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.4.html)
 with [CC:Tweaked 1.96.0](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked/files)
 
