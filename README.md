@@ -31,7 +31,7 @@ Program Text               |  Demo
 
 On the minecraft side of things, you need the following one-time setup:
 
-1) Choose latest versions of the following that work together
+### 1) Choose latest versions of the following that work together
 
 Note: If you already installed [DoBots](http://github.com/TamaMcGlinn/DoBots), that should work fine for AdaBots as well. You only need to
 do step 6 - Configure computercraft to allow http. DoBots uses a slightly older version of Minecraft in order to support Plethora for
@@ -41,11 +41,11 @@ Currently the latest supported version is Minecraft and
 [Minecraft Forge 1.16.4](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.4.html)
 with [CC:Tweaked 1.96.0](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked/files)
 
-2) Install [minecraft](https://minecraft.net/)
+### 2) Install [minecraft](https://minecraft.net/)
 
 You will need to purchase the game.
 
-3) Install [minecraft forge](https://files.minecraftforge.net/net/minecraftforge/forge/)
+### 3) Install [minecraft forge](https://files.minecraftforge.net/net/minecraftforge/forge/)
 
 Download the installer for your operating system and minecraft version. Run it:
 
@@ -55,7 +55,7 @@ Download the installer for your operating system and minecraft version. Run it:
 Select the forge game version in the launcher and press play, letting it load until you
 are presented with the main game menu.
 
-4) Install [CC:Tweaked](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked)
+### 4) Install [CC:Tweaked](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked)
 
 The minecraft directory is 
 
@@ -65,7 +65,7 @@ The minecraft directory is
 
 It contains mods/, and you should put the cc-tweaked .jar file in there and restart.
 
-5) Give yourself a turtle in-game
+### 5) Give yourself a turtle in-game
 
 I recommend you create a survival mode world set to peaceful with cheats enabled. 
 You may also wish to enter these commands in-game to avoid distractions:
@@ -78,6 +78,8 @@ You may also wish to enter these commands in-game to avoid distractions:
 ```
 
 With cheats enabled, you can type `/give [yourname] computercraft:turtle_normal` (with tab-completion).
+If you [craft it](https://www.minecraft-crafting.net/) beside a diamond pickaxe, you get a mining turtle which can also dig.
+
 Place it and right click it to open an in-game terminal on the turtle. Issue this command to give
 the turtle a name, and also to create the turtle's program directory:
 
@@ -90,17 +92,13 @@ Inside the minecraft directory, edit saves/[save_name]/serverconfig/computercraf
 - Remove all [[http.rules]] blocks that say 'deny'
 - (optional) Set need_fuel = false so that turtles can move without fuel
 
-7) Copy (or symlink) lua/httpslave onto the turtle
+### 6) Copy (or symlink) lua/httpslave onto the turtle
 
 In the minecraft directory, under saves/[save_name]/computercraft/computer/ there is a numbered
 directory for every turtle in computercraft. You can copy lua/httpslave into that directory,
 and then issue `httpslave` on the turtle's terminal. It will ask for an IP and port to listen to;
 press enter for the default. If you want multiple turtles, give each a different port in your
-Ada program like so:
-
-```
-
-```
+Ada program.
 
 ## Ada environment
 
