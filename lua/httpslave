@@ -15,6 +15,8 @@ if server == "" then
   server = default_server
 end
 
+print("Okay, listening on: " .. server)
+
 while true do
 
   local request = nil
