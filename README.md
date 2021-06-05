@@ -4,7 +4,7 @@ The computercraft mod for Minecraft adds programmable robots called turtles,
 which can move around, dig tunnels, build walls and interact with anything in-game.
 
 This repository intends to teach children and adults alike the Ada programming language.
-If your child cannot read yet, I recommend you start him/her on
+If your child cannot read yet, I recommend you start him / her on
 [DoBots](http://github.com/TamaMcGlinn/DoBots) first.
 
 It is possible to use the small terminal window in-game and the built-in scripting
