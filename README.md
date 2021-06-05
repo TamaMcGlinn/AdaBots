@@ -106,9 +106,10 @@ For Ada programming, you will need to install:
 
 - An Ada Compiler
 - A development environment such as GPS
+- [Alire (alr)](https://alire.ada.dev/)
 
-Both come with the GNAT Community edition.
-Go to [AdaCore.com > Community > Download](https://www.adacore.com/download)
+For the compiler and development environment,
+go to [AdaCore.com > Community > Download](https://www.adacore.com/download)
 And run the installer for your platform.
 
 Finally, run GPS and open adabots.gpr to edit the code.
