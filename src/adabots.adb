@@ -195,6 +195,11 @@ package body Adabots is
       null;
    end Maybe_Place_Up;
 
+   function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.drop(" & Amount'Image & ")");
+   end Drop;
+
    --  private:
 
    overriding procedure Finalize (T : in out Turtle) is

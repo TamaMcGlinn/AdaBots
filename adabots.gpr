@@ -15,7 +15,7 @@ project Adabots is
    for Create_Missing_Dirs use "True";
    for Exec_Dir use "bin";
 
-   for Main use ("build_wall.adb", "remove_wall.adb", "get_stone.adb");
+   for Main use ("build_wall.adb", "remove_wall.adb", "get_stone.adb", "staircase_down.adb");
 
    type Enabled_Kind is ("enabled", "disabled");
    Compile_Checks : Enabled_Kind := External ("ADABOTS_COMPILE_CHECKS", "enabled");

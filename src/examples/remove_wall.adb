@@ -1,4 +1,3 @@
-with Ada.Text_IO;
 with Adabots;
 
 procedure Remove_Wall is

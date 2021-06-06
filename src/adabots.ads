@@ -6,6 +6,7 @@ with AWS.Status;
 package Adabots is
    type Turtle is new Ada.Finalization.Limited_Controlled with private;
    type Turtle_Inventory_Slot is range 1 .. 16;
+   type Stack_Count is range 0 .. 64;
 
    function Create_Turtle (Port : Integer := 7_112) return Turtle;
 
@@ -50,6 +51,11 @@ package Adabots is
    procedure Maybe_Place (T : Turtle);
    procedure Maybe_Place_Down (T : Turtle);
    procedure Maybe_Place_Up (T : Turtle);
+
+   --  https://tweaked.cc/module/turtle.html#v:drop
+   function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean;
+--  function DropUp (T : Turtle; Amount : Stack_Count := 64) return Boolean;
+--  function DropDown (T : Turtle; Amount : Stack_Count := 64) return Boolean;
 
 private
 

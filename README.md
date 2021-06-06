@@ -91,6 +91,23 @@ Inside the minecraft directory, edit saves/[save_name]/serverconfig/computercraf
 - Remove all [[http.rules]] blocks that say 'deny'
 - (optional) Set need_fuel = false so that turtles can move without fuel
 
+Or, if that file doesn't exist, you may need to find the following in config/computercraft.cfg:
+
+```
+    # A list of wildcards for domains or IP ranges that cannot be accessed through the "http" API on Computers.
+    # If this is empty then all explicitly allowed domains will be accessible. Example: "*.github.com" will block access to all subdomains of github.com.
+    # You can use domain names ("pastebin.com"), wildcards ("*.pastebin.com") or CIDR notation ("127.0.0.0/8").
+    S:blocked_domains <
+        127.0.0.0/8
+        10.0.0.0/8
+        172.16.0.0/12
+        192.168.0.0/16
+        fd00::/8
+     >
+```
+
+And remove the blocked domains.
+
 ### 6) Copy (or symlink) lua/httpslave onto the turtle
 
 In the minecraft directory, under saves/[save_name]/computercraft/computer/ there is a numbered

@@ -16,6 +16,7 @@ if server == "" then
 end
 
 print("Okay, listening on: " .. server)
+print("")
 
 while true do
 

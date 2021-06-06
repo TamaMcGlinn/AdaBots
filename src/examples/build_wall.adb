@@ -1,4 +1,3 @@
-with Ada.Text_IO;
 with Adabots;
 
 procedure Build_Wall is
