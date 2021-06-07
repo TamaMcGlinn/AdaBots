@@ -4,7 +4,7 @@ with AWS.Response;
 with AWS.Status;
 
 package Adabots is
-   type Turtle is new Ada.Finalization.Limited_Controlled with private;
+   type Turtle (<>) is new Ada.Finalization.Limited_Controlled with private;
    type Turtle_Inventory_Slot is range 1 .. 16;
    type Stack_Count is range 0 .. 64;
 
@@ -64,11 +64,11 @@ private
       entry Fetch_Command (Command : out Unbounded_String);
       entry Push_Return_Value (Return_Value : String);
       entry Get_Result (Result : out Unbounded_String);
-      entry Shutdown;
    end Command_Server;
 
-   type Turtle is new Ada.Finalization.Limited_Controlled with record
-      Server : access Command_Server;
+   type Turtle (Port : Integer) is new Ada.Finalization.Limited_Controlled with
+   record
+      Server : Command_Server (Port);
    end record;
 
    overriding procedure Finalize (T : in out Turtle);

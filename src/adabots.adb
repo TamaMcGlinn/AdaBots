@@ -1,4 +1,5 @@
 with Ada.Text_IO;
+with Ada.Task_Identification;
 with Ada.Exceptions;
 with AWS.Server;
 with AWS.MIME;
@@ -10,8 +11,7 @@ package body Adabots is
    function Create_Turtle (Port : Integer := 7_112) return Turtle is
    begin
       return
-        (Ada.Finalization.Limited_Controlled with
-         Server => new Command_Server (Port));
+        (Ada.Finalization.Limited_Controlled with Port => Port, Server => <>);
    end Create_Turtle;
 
    procedure Turn_Right (T : Turtle) is
@@ -204,7 +204,7 @@ package body Adabots is
 
    overriding procedure Finalize (T : in out Turtle) is
    begin
-      T.Server.Shutdown;
+      null;
    end Finalize;
 
    type Server_Status is
@@ -267,15 +267,11 @@ package body Adabots is
                   Status       := Sending_Command;
                end Schedule_Command;
             or
-               accept Shutdown do
-                  Ada.Text_IO.Put_Line ("Command server shutting down...");
-                  AWS.Server.Shutdown (HTTP_Server);
-                  Status := Stopping;
-                  delay 60.0; -- TODO figure out why this is necessary;
-         --  the next run needs to wait a whole minute before starting,
-         --  otherwise you get this error when trying to start the HTTP_Server:
-         --  raised AWS.NET.SOCKET_ERROR : Bind : [98] Address already in use
-               end Shutdown;
+               delay 1.0;
+               exit when not Ada.Task_Identification.Is_Callable
+                   (Ada.Task_Identification.Environment_Task);
+               -- note; also tried just 'exit' which sometimes works
+               -- but of course is not a solution
             end select;
          elsif Status = Sending_Command then
             accept Fetch_Command (Command : out Unbounded_String) do
@@ -296,8 +292,10 @@ package body Adabots is
                Status          := Awaiting_Command;
             end Get_Result;
          end if;
-         exit Command_Loop when Status = Stopping;
       end loop Command_Loop;
+
+      Ada.Text_IO.Put_Line ("Command server shutting down...");
+      AWS.Server.Shutdown (HTTP_Server);
 
    exception
       when Error : others =>
