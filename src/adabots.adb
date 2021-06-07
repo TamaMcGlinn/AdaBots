@@ -271,10 +271,6 @@ package body Adabots is
                   Ada.Text_IO.Put_Line ("Command server shutting down...");
                   AWS.Server.Shutdown (HTTP_Server);
                   Status := Stopping;
-                  delay 60.0; -- TODO figure out why this is necessary;
-         --  the next run needs to wait a whole minute before starting,
-         --  otherwise you get this error when trying to start the HTTP_Server:
-         --  raised AWS.NET.SOCKET_ERROR : Bind : [98] Address already in use
                end Shutdown;
             end select;
          elsif Status = Sending_Command then
