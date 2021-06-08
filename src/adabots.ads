@@ -8,7 +8,8 @@ package Adabots is
    type Turtle_Inventory_Slot is range 1 .. 16;
    type Stack_Count is range 0 .. 64;
 
-   function Create_Turtle (Port : Integer := 7_112) return Turtle;
+   function Create_Turtle return Turtle;
+   function Create_Turtle (Port : Integer) return Turtle;
 
    procedure Turn_Right (T : Turtle);
    procedure Turn_Left (T : Turtle);
