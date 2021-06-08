@@ -75,8 +75,12 @@ package body Adabots is
    end Place_Up;
 
    procedure Select_Slot (T : Turtle; Slot : Turtle_Inventory_Slot) is
+      Command : constant String  := "turtle.select(" & Slot'Image & ")";
+      Result  : constant Boolean := Boolean_Function (T, Command);
    begin
-      Turtle_Procedure (T, "turtle.select()");
+      if Result = False then
+         raise Program_Error with Command & " returned False";
+      end if;
    end Select_Slot;
 
    procedure Forward (T : Turtle) is
