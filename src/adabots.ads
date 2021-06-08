@@ -27,6 +27,13 @@ package Adabots is
    function Place_Up (T : Turtle) return Boolean;
 
    procedure Select_Slot (T : Turtle; Slot : Turtle_Inventory_Slot);
+   function Get_Item_Count
+     (T : Turtle; Slot : Turtle_Inventory_Slot) return Stack_Count;
+
+   --  https://tweaked.cc/module/turtle.html#v:drop
+   function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean;
+--  function DropUp (T : Turtle; Amount : Stack_Count := 64) return Boolean;
+--  function DropDown (T : Turtle; Amount : Stack_Count := 64) return Boolean;
 
    --  these procedures assert that the function of the same name returned true
 
@@ -43,6 +50,8 @@ package Adabots is
    procedure Place_Down (T : Turtle);
    procedure Place_Up (T : Turtle);
 
+   procedure Drop (T : Turtle; Amount : Stack_Count := 64);
+
    --   these procedures don't care what the result is
 
    procedure Maybe_Dig_Down (T : Turtle);
@@ -51,11 +60,6 @@ package Adabots is
    procedure Maybe_Place (T : Turtle);
    procedure Maybe_Place_Down (T : Turtle);
    procedure Maybe_Place_Up (T : Turtle);
-
-   --  https://tweaked.cc/module/turtle.html#v:drop
-   function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean;
---  function DropUp (T : Turtle; Amount : Stack_Count := 64) return Boolean;
---  function DropDown (T : Turtle; Amount : Stack_Count := 64) return Boolean;
 
 private
 

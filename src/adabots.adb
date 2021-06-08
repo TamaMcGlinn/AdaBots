@@ -83,6 +83,20 @@ package body Adabots is
       end if;
    end Select_Slot;
 
+   function Get_Item_Count
+     (T : Turtle; Slot : Turtle_Inventory_Slot) return Stack_Count
+   is
+      Command : constant String := "turtle.getItemCount(" & Slot'Image & ")";
+      Result  : constant String := Raw_Function (T, Command);
+   begin
+      return Stack_Count'Value (Result);
+   end Get_Item_Count;
+
+   function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.drop(" & Amount'Image & ")");
+   end Drop;
+
    procedure Forward (T : Turtle) is
       Result : constant Boolean := Forward (T);
    begin
@@ -163,6 +177,15 @@ package body Adabots is
       end if;
    end Place_Up;
 
+   procedure Drop (T : Turtle; Amount : Stack_Count := 64) is
+      Result : constant Boolean := Drop (T, Amount);
+   begin
+      if Result = False then
+         raise Program_Error
+           with "Turtle.Drop(" & Amount'Image & ") returned False";
+      end if;
+   end Drop;
+
    procedure Maybe_Dig_Down (T : Turtle) is
       Result : constant Boolean := Dig_Down (T);
    begin
@@ -198,11 +221,6 @@ package body Adabots is
    begin
       null;
    end Maybe_Place_Up;
-
-   function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean is
-   begin
-      return Boolean_Function (T, "turtle.drop(" & Amount'Image & ")");
-   end Drop;
 
    --  private:
 
