@@ -22,13 +22,26 @@ begin
                exit when not Robot.Down; -- TODO or Robot.Detect;
             end loop;
          when Up =>
-            loop
-               declare
-                  Dont_Care : Boolean := Robot.Up;
-               begin
-                  exit when Robot.Detect;
-               end;
-            end loop;
+            declare
+               Original_Detect : Boolean := Robot.Detect;
+               Levels          : Natural := 0;
+            begin
+               loop
+                  declare
+                     Dont_Care  : Boolean          := Robot.Up;
+                     New_Detect : constant Boolean := Robot.Detect;
+                  begin
+                     Levels := Levels + 1;
+                     if New_Detect /= Original_Detect then
+                        if Levels = 1 then
+                           Original_Detect := New_Detect;
+                        else
+                           return;
+                        end if;
+                     end if;
+                  end;
+               end loop;
+            end;
       end case;
    end;
 end Elevator;
