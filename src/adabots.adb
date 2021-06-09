@@ -108,10 +108,45 @@ package body Adabots is
       return Stack_Count'Value (Result);
    end Get_Item_Count;
 
+   function Get_Selected_Slot (T : Turtle) return Turtle_Inventory_Slot is
+   begin
+      return
+        Turtle_Inventory_Slot'Value
+          (Raw_Function (T, "turtle.getSelectedSlot()"));
+   end Get_Selected_Slot;
+
+   function Get_Item_Detail (T : Turtle) return Item_Detail is
+   begin
+      return Parse_Item_Details (Raw_Function (T, "turtle.getItemDetail()"));
+   end Get_Item_Detail;
+
+   function Get_Item_Detail
+     (T : Turtle; Slot : Turtle_Inventory_Slot) return Item_Detail
+   is
+      Command : constant String := "turtle.getItemDetail(" & Slot'Image & ")";
+   begin
+      return Parse_Item_Details (Raw_Function (T, Command));
+   end Get_Item_Detail;
+
    function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin
       return Boolean_Function (T, "turtle.drop(" & Amount'Image & ")");
    end Drop;
+
+   function Detect (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.detect()");
+   end Detect;
+
+   function Detect_Down (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.detectDown()");
+   end Detect_Down;
+
+   function Detect_Up (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T, "turtle.detectUp()");
+   end Detect_Up;
 
    procedure Forward (T : Turtle) is
       Result : constant Boolean := Forward (T);
@@ -293,7 +328,7 @@ package body Adabots is
       AWS.Server.Start
         (HTTP_Server, "Adabots", Callback => Respond'Unrestricted_Access,
          Port                             => Port);
-      Ada.Text_IO.Put_Line ("Command server started");
+      -- Ada.Text_IO.Put_Line ("Command server started");
 
       Command_Loop :
       loop
@@ -306,7 +341,7 @@ package body Adabots is
                end Schedule_Command;
             or
                accept Shutdown do
-                  Ada.Text_IO.Put_Line ("Command server shutting down...");
+                  -- Ada.Text_IO.Put_Line ("Command server shutting down...");
                   AWS.Server.Shutdown (HTTP_Server);
                   Status := Stopping;
                end Shutdown;
@@ -314,7 +349,7 @@ package body Adabots is
          elsif Status = Sending_Command then
             accept Fetch_Command (Command : out Unbounded_String) do
                Command := Next_Command;
-               Ada.Text_IO.Put_Line ("Sent " & To_String (Command));
+               -- Ada.Text_IO.Put_Line ("Sent " & To_String (Command));
                Next_Command := To_Unbounded_String ("");
                Status       := Fetching_Return_Value;
             end Fetch_Command;
@@ -381,5 +416,12 @@ package body Adabots is
    begin
       null;
    end Turtle_Procedure;
+
+   function Parse_Item_Details (Table : String) return Item_Detail is
+      Result : constant Item_Detail :=
+        (Count => 0, Name => To_Unbounded_String (""));
+   begin
+      return Result;
+   end Parse_Item_Details;
 
 end Adabots;
