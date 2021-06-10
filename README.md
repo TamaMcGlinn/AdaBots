@@ -1,5 +1,9 @@
 # Learn Ada by programming Minecraft robots!
 
+Program Text               |  Demo
+:-------------------------:|:-------------------------:
+![](demo/build_wall_program.png)  |  ![](demo/small_gif.gif)
+
 The computercraft mod for Minecraft adds programmable robots called turtles,
 which can move around, dig tunnels, build walls and interact with anything in-game.
 
@@ -12,20 +16,21 @@ language Lua to write programs, but I wanted to make this easier. This is a stan
 program you can run on your computer locally, outside of minecraft, which issues commands
 to the in-game turtles. This means you can use a real programming environment, with
 code-completion, a debugger, static-analysis and even mathematical proofs of program
-correctness.
+correctness using SPARK.
 
 ## Ada
 
 Ada is a very safe, easy to learn language. It was designed from the ground up to be easy
-to understand, and difficult to make mistakes in. It is case-insensitive, disallows assignment
+to understand and difficult to make mistakes in. It is case-insensitive, disallows assignment
 inside conditional statements, has explicit `end if;`, `end loop;` etc. instead of the popular
-but confusing `}` in most programming languages. The tasking and rendez-vous idiom supported
-by Ada is far easier than the explicit locks and threading prevalent in the software industry,
-and makes it very difficult to create data-races 
+but confusing `}` in most programming languages, disallows all implicit type conversions
+(which also makes it possible to overload on return type), and even makes multithreading easy with
+its simple tasking and rendez-vous idiom. Since you can create tasks and multiple turtles in a single
+program, you could explain these concepts intuitively using AdaBots.
 
-Program Text               |  Demo
-:-------------------------:|:-------------------------:
-![](demo/build_wall_program.png)  |  ![](demo/small_gif.gif)
+To teach (children) using AdaBots, you need at least a basic understanding of Ada. I recommend
+the AdaCore [Introduction to Ada](https://learn.adacore.com/courses/intro-to-ada/) (html / pdf)
+for that.
 
 ## Install instructions (minecraft)
 
@@ -91,7 +96,10 @@ Inside the minecraft directory, edit saves/[save_name]/serverconfig/computercraf
 - Remove all [[http.rules]] blocks that say 'deny'
 - (optional) Set need_fuel = false so that turtles can move without fuel
 
-Or, if that file doesn't exist, you may need to find the following in config/computercraft.cfg:
+Note: I am going to assume you set need_fuel = false. The provided example programs won't run
+if you left this at true and didn't manually refuel the turtles.
+
+If that file doesn't exist, you may instead need to find the following in config/computercraft.cfg:
 
 ```
     # A list of wildcards for domains or IP ranges that cannot be accessed through the "http" API on Computers.
@@ -130,12 +138,12 @@ And run the installer for your platform.
 
 Finally, run GPS and open adabots.gpr to edit the code.
 
-# Compile
+### Compile
 
 To compile, issue `alr build` from the (out-of-game) terminal in the root directory of this repository.
 
-# Run
+### Run
 
-To start the program, issue `./bin/main`. Assuming httpslave is already running on a turtle,
-it should start spinning.
+To start the program, issue `./bin/[program_name]`. Assuming httpslave is already running on a turtle,
+it should start moving.
 
