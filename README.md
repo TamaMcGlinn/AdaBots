@@ -41,6 +41,17 @@ To teach (children) using AdaBots, you need at least a basic understanding of Ad
 the AdaCore [Introduction to Ada](https://learn.adacore.com/courses/intro-to-ada/) (html / pdf)
 for that. This can also serve as your course syllabus.
 
+## Live demo (ask me anything)
+
+For a live demo, meet me on gather in the
+[AdaBots room](https://gather.town/app/xCt8mJk5v5OHZBbx/AdaBots),
+saturdays:
+
+Time | CEST | EDT | PDT | UTC
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+[first](https://www.worldtimebuddy.com/?qm=1&lid=12,5,308,100&h=12&date=2021-6-10&sln=9-10&hf=1) | 09:00 | 03:00 | 00:00 | 07:00
+[second](https://www.worldtimebuddy.com/?qm=1&lid=12,5,308,100&h=12&date=2021-6-10&sln=16-17&hf=1) | 16:00 | 10:00 | 07:00 | 14:00
+
 ## Install instructions (minecraft)
 
 On the minecraft side of things, you need the following one-time setup:
