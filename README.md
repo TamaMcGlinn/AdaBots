@@ -1,4 +1,4 @@
-# Learn Ada by programming Minecraft robots!
+# Learn Ada with programmable bots!
 
 Program Text               |  Demo
 :-------------------------:|:-------------------------:
@@ -18,7 +18,7 @@ to the in-game turtles. This means you can use a real programming environment, w
 code-completion, a debugger, static-analysis and even mathematical proofs of program
 correctness using SPARK.
 
-## Ada
+## Why Ada?
 
 Ada is a very safe, easy to learn language. It was designed from the ground up to be easy
 to understand and difficult to make mistakes in. It is case-insensitive, disallows assignment
@@ -28,9 +28,18 @@ but confusing `}` in most programming languages, disallows all implicit type con
 its simple tasking and rendez-vous idiom. Since you can create tasks and multiple turtles in a single
 program, you could explain these concepts intuitively using AdaBots.
 
+In addition, the GCC Ada compiler is an unusually helpful one, saying things like:
+
+```
+lovelace.adb:10:04: warning: variable "Blocks" is never read and never assigned
+
+lovelace.adb:20:30: error: "Dat" is undefined
+lovelace.adb:20:30: error: possible misspelling of "Data"
+```
+
 To teach (children) using AdaBots, you need at least a basic understanding of Ada. I recommend
 the AdaCore [Introduction to Ada](https://learn.adacore.com/courses/intro-to-ada/) (html / pdf)
-for that.
+for that. This can also serve as your course syllabus.
 
 ## Install instructions (minecraft)
 
