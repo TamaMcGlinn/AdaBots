@@ -14,7 +14,9 @@ begin
    for Depth in 1 .. 15 loop
       Robot.Maybe_Dig_Down;
       Robot.Down;
-      Robot.Maybe_Dig;
+      loop
+         exit when not Robot.Dig;
+      end loop;
       Robot.Forward;
       Robot.Maybe_Dig;
       Robot.Maybe_Dig_Up;
