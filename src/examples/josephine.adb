@@ -4,7 +4,6 @@ procedure Josephine is
 
    Robot : constant Adabots.Turtle := Adabots.Create_Turtle;
 
-   procedure Build_Pole_Upwards;
    procedure Build_Pole_Upwards is
    begin
       for D in 1 .. 5 loop
@@ -22,7 +21,6 @@ procedure Josephine is
       end loop;
    end Build_Pole_Backwards;
 
-   procedure Build_Pole_Downwards;
    procedure Build_Pole_Downwards is
    begin
       for D in 1 .. 5 loop
@@ -31,7 +29,6 @@ procedure Josephine is
       end loop;
    end Build_Pole_Downwards;
 
-   procedure Build_Arch_Backward;
    procedure Build_Arch_Backward is
    begin
 
@@ -41,7 +38,6 @@ procedure Josephine is
 
    end Build_Arch_Backward;
 
-   procedure Go_There;
    procedure Go_There is
    begin
       Robot.Turn_Right;
@@ -52,14 +48,12 @@ procedure Josephine is
       Robot.Forward;
    end Go_There;
 
-   procedure Turn_Around;
    procedure Turn_Around is
    begin
       Robot.Turn_Left;
       Robot.Turn_Left;
    end Turn_Around;
 
-   procedure Go_Up;
    procedure Go_Up is
    begin
       for D in 1 .. 5 loop
@@ -71,7 +65,6 @@ procedure Josephine is
       Robot.Back;
    end Go_Up;
 
-   procedure Build_Floor_Line;
    procedure Build_Floor_Line is
    begin
       for D in 1 .. 5 loop
@@ -80,7 +73,6 @@ procedure Josephine is
       end loop;
    end Build_Floor_Line;
 
-   procedure Build_Floor;
    procedure Build_Floor is
    begin
       for D in 1 .. 3 loop
@@ -104,7 +96,6 @@ procedure Josephine is
 
    end Build_Floor;
 
-   procedure Go_To_Next_Floor;
    procedure Go_To_Next_Floor is
    begin
       Robot.Up;
@@ -114,7 +105,6 @@ procedure Josephine is
       Robot.Turn_Right;
    end Go_To_Next_Floor;
 
-   procedure Robot_Do_It;
    procedure Robot_Do_It is
    begin
       Build_Arch_Backward;
@@ -125,6 +115,7 @@ procedure Josephine is
       Build_Floor;
       Go_To_Next_Floor;
    end Robot_Do_It;
+
 begin
 
    Robot_Do_It;
