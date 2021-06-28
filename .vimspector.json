@@ -1,0 +1,12 @@
+{
+  "configurations": {
+    "launch": {
+      "adapter": "CodeLLDB",
+      "configuration": {
+        "request": "launch",
+        "program": "${workspaceRoot}/bin/${fileBasenameNoExtension}",
+        "initCommands": ["script import math"]
+      }
+    }
+  }
+}
