@@ -1,12 +1,14 @@
 name = "adabots"
 description = "Learn Ada by programming Minecraft robots"
-version = "0.0.0"
+version = "1.0.0"
 
 authors = ["Tama McGlinn"]
 maintainers = ["Tama McGlinn <t.mcglinn@gmail.com>"]
 maintainers-logins = ["TamaMcGlinn"]
 
-executables = ["adabots"]
+licenses = "MIT"
+project-files = ["adabots.gpr"]
+tags = ["learn", "ada", "minecraft", "computercraft", "robots", "teach", "children"]
 
 [[depends-on]]  # This line was added by `alr with`
 aws = "^21.0.0"  # This line was added by `alr with`

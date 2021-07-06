@@ -1,19 +1,13 @@
--- begin auto-gpr-with --
---  This section was automatically added by Alire
-with "aws.gpr";
-with "xmlada.gpr";
-with "xmlada_dom.gpr";
-with "xmlada_input.gpr";
-with "xmlada_sax.gpr";
-with "xmlada_schema.gpr";
-with "xmlada_unicode.gpr";
--- end auto-gpr-with --
+with "adabots.gpr";
 
-project Adabots is
+project Adabots_Examples is
 
-   for Source_Dirs use ("src");
+   for Source_Dirs use (".");
    for Object_Dir use "obj";
    for Create_Missing_Dirs use "True";
+   for Exec_Dir use "bin";
+
+   for Main use ("build_wall.adb", "remove_wall.adb", "get_stone.adb", "staircase_down.adb", "josephine.adb", "dig_cavern.adb", "build_maze.adb", "elevator.adb", "lovelace.adb", "dig_hallway.adb", "spiral_staircase.adb", "walk_up_stairs.adb");
 
    type Enabled_Kind is ("enabled", "disabled");
    Compile_Checks : Enabled_Kind := External ("ADABOTS_COMPILE_CHECKS", "enabled");
@@ -87,4 +81,4 @@ project Adabots is
       for Switches ("Ada") use ("-Es"); --  Symbolic traceback
    end Binder;
 
-end Adabots;
+end Adabots_Examples;

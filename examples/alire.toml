@@ -1,0 +1,12 @@
+name = "adabots_examples"
+description = "Replace this name / description for your own project"
+version = "1.0.0"
+
+authors = ["Your Name"]
+maintainers = ["Your Name <your@email.com>"]
+maintainers-logins = ["YourGithubLogin"]
+
+tags = ["adabots", "computercraft", "yourtag"]
+
+[[depends-on]]  # This line was added by `alr with`
+adabots = "^1.0.0"  # This line was added by `alr with`
