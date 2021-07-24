@@ -239,36 +239,42 @@ package body Adabots is
 
    procedure Maybe_Dig_Down (T : Turtle) is
       Result : constant Boolean := Dig_Down (T);
+      pragma Unreferenced (Result);
    begin
       null;
    end Maybe_Dig_Down;
 
    procedure Maybe_Dig_Up (T : Turtle) is
       Result : constant Boolean := Dig_Up (T);
+      pragma Unreferenced (Result);
    begin
       null;
    end Maybe_Dig_Up;
 
    procedure Maybe_Dig (T : Turtle) is
       Result : constant Boolean := Dig (T);
+      pragma Unreferenced (Result);
    begin
       null;
    end Maybe_Dig;
 
    procedure Maybe_Place (T : Turtle) is
       Result : constant Boolean := Place (T);
+      pragma Unreferenced (Result);
    begin
       null;
    end Maybe_Place;
 
    procedure Maybe_Place_Down (T : Turtle) is
       Result : constant Boolean := Place_Down (T);
+      pragma Unreferenced (Result);
    begin
       null;
    end Maybe_Place_Down;
 
    procedure Maybe_Place_Up (T : Turtle) is
       Result : constant Boolean := Place_Up (T);
+      pragma Unreferenced (Result);
    begin
       null;
    end Maybe_Place_Up;
@@ -277,7 +283,9 @@ package body Adabots is
 
    overriding procedure Finalize (T : in out Turtle) is
    begin
+      Ada.Text_IO.Put_Line ("Shutting down...");
       T.Server.Shutdown;
+      Ada.Text_IO.Put_Line ("Shutdown finished...");
    end Finalize;
 
    type Server_Status is
@@ -412,14 +420,15 @@ package body Adabots is
    end String_Function;
 
    procedure Turtle_Procedure (T : Turtle; Lua_Code : String) is
-      Discarded_Return_Value : String := Raw_Function (T, Lua_Code);
+      Result : String := Raw_Function (T, Lua_Code);
+      pragma Unreferenced (Result);
    begin
       null;
    end Turtle_Procedure;
 
    function Parse_Item_Details (Table : String) return Item_Detail is
       Result : constant Item_Detail :=
-        (Count => 0, Name => To_Unbounded_String (""));
+        (Count => 0, Name => To_Unbounded_String ("")); --TODO
    begin
       return Result;
    end Parse_Item_Details;
