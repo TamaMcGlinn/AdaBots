@@ -1,6 +1,8 @@
 with Ada.Text_IO;
 with Ada.Exceptions;
 with AWS.Server;
+with AWS.Response;
+with AWS.Status;
 with AWS.MIME;
 
 package body Adabots is
@@ -428,7 +430,8 @@ package body Adabots is
 
    function Parse_Item_Details (Table : String) return Item_Detail is
       Result : constant Item_Detail :=
-        (Count => 0, Name => To_Unbounded_String ("")); --TODO
+        (Count => 0, Name => To_Unbounded_String (""));
+      pragma Unreferenced (Table); -- TODO
    begin
       return Result;
    end Parse_Item_Details;
