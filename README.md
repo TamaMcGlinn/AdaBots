@@ -7,7 +7,7 @@ Program Text               |  Demo
 The computercraft mod for Minecraft adds programmable robots called turtles,
 which can move around, dig tunnels, build walls and interact with anything in-game.
 
-This repository helps to teach children and adults alike the Ada programming language.
+AdaBots helps to teach children and adults alike the Ada programming language.
 If your child cannot read yet, I recommend you start him / her on
 [DoBots](http://github.com/TamaMcGlinn/DoBots) first.
 
@@ -40,6 +40,10 @@ lovelace.adb:20:30: error: possible misspelling of "Data"
 To teach (children) using AdaBots, you need at least a basic understanding of Ada. I recommend
 the AdaCore [Introduction to Ada](https://learn.adacore.com/courses/intro-to-ada/) (html / pdf)
 as a course syllabus.
+
+# Example programs
+
+There is a collection of example programs [here](https://github.com/TamaMcGlinn/AdaBots_examples).
 
 ## Live demo (ask me anything)
 
