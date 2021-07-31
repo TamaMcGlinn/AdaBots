@@ -1,7 +1,5 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Finalization;
-with AWS.Response;
-with AWS.Status;
 
 package Adabots is
    type Turtle is new Ada.Finalization.Limited_Controlled with private;
