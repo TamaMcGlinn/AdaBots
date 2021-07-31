@@ -1,4 +1,4 @@
-with "adabots.gpr";
+with "../adabots.gpr";
 
 project Adabots_Examples is
 

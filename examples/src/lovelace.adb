@@ -1,7 +1,7 @@
 -- with Adabots;
-with Ada.Sequential_IO;
-with Ada.Text_IO;
-with Interfaces;
+-- with Ada.Sequential_IO;
+-- with Ada.Text_IO;
+-- with Interfaces;
 
 procedure Lovelace is
 -- use type Interfaces.Unsigned_8;

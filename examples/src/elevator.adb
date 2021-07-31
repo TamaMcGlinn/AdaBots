@@ -28,7 +28,8 @@ begin
             begin
                loop
                   declare
-                     Dont_Care  : Boolean          := Robot.Up;
+                     Dont_Care : Boolean := Robot.Up;
+                     pragma Unreferenced (Dont_Care);
                      New_Detect : constant Boolean := Robot.Detect;
                   begin
                      Levels := Levels + 1;
