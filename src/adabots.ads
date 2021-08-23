@@ -88,8 +88,10 @@ private
       entry Shutdown;
    end Command_Server;
 
+   type Access_Command_Server is access Command_Server;
+
    type Turtle is new Ada.Finalization.Limited_Controlled with record
-      Server : access Command_Server;
+      Server : Access_Command_Server;
    end record;
 
    overriding procedure Finalize (T : in out Turtle);
