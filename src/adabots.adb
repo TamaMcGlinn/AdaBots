@@ -4,6 +4,8 @@ with AWS.Server;
 with AWS.Response;
 with AWS.Status;
 with AWS.MIME;
+with AWS.Config;
+with AWS.Config.Set;
 
 package body Adabots is
 
@@ -310,9 +312,10 @@ package body Adabots is
 
    task body Command_Server is
       HTTP_Server     : AWS.Server.HTTP;
+      AWS_Config      : AWS.Config.Object := AWS.Config.Default_Config;
       Next_Command    : Unbounded_String;
       Previous_Result : Unbounded_String;
-      Status          : Server_Status := Awaiting_Command;
+      Status          : Server_Status     := Awaiting_Command;
 
       function Respond (Request : AWS.Status.Data) return AWS.Response.Data;
       function Respond (Request : AWS.Status.Data) return AWS.Response.Data is
@@ -335,9 +338,12 @@ package body Adabots is
              (AWS.MIME.Text_Plain, To_Unbounded_String ("error"));
       end Respond;
    begin
+      AWS.Config.Set.Reuse_Address (AWS_Config, True);
+      AWS.Config.Set.Server_Port (AWS_Config, Port);
+      AWS.Config.Set.Server_Name (AWS_Config, "Adabots");
       AWS.Server.Start
-        (HTTP_Server, "Adabots", Callback => Respond'Unrestricted_Access,
-         Port                             => Port);
+        (HTTP_Server, Callback => Respond'Unrestricted_Access,
+         Config                => AWS_Config);
       -- Ada.Text_IO.Put_Line ("Command server started");
 
       Command_Loop :
