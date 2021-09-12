@@ -1,13 +1,15 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Finalization;
+with Adabots_Lua_Dispatcher;
 
 package Adabots is
+
    type Turtle is new Ada.Finalization.Limited_Controlled with private;
    type Turtle_Inventory_Slot is range 1 .. 16;
    type Stack_Count is range 0 .. 64;
    type Item_Detail is record
       Count : Stack_Count;
-      Name  : Unbounded_String;
+      Name  : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    function Create_Turtle return Turtle;
@@ -80,29 +82,9 @@ package Adabots is
 
 private
 
-   task type Command_Server (Port : Integer) is
-      entry Schedule_Command (Command : String);
-      entry Fetch_Command (Command : out Unbounded_String);
-      entry Push_Return_Value (Return_Value : String);
-      entry Get_Result (Result : out Unbounded_String);
-      entry Shutdown;
-   end Command_Server;
-
-   type Access_Command_Server is access Command_Server;
-
    type Turtle is new Ada.Finalization.Limited_Controlled with record
-      Server : Access_Command_Server;
+      Dispatcher : Adabots_Lua_Dispatcher.Lua_Dispatcher;
    end record;
-
-   overriding procedure Finalize (T : in out Turtle);
-
-   function Raw_Function (T : Turtle; Lua_Code : String) return String;
-
-   function Boolean_Function (T : Turtle; Lua_Code : String) return Boolean;
-
-   function String_Function (T : Turtle; Lua_Code : String) return String;
-
-   procedure Turtle_Procedure (T : Turtle; Lua_Code : String);
 
    function Parse_Item_Details (Table : String) return Item_Detail;
 
