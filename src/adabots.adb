@@ -295,39 +295,37 @@ package body Adabots is
          Dispatcher => Create_Lua_Dispatcher (Port));
    end Create_Command_Computer;
 
-   function Is_Valid_Location_Component (S : String) return Boolean is
-   begin
-      if S'Size < 1 then
-         return False;
-      end if;
-      return True;
-   end Is_Valid_Location_Component;
-
-   function Create_Location
-     (X : String; Y : String; Z : String) return Location
-   is
+   function "+" (A, B : Relative_Location) return Relative_Location is
    begin
       return
-        (X_Size => X'Last, Y_Size => Y'Last, Z_Size => Z'Last,
-         X      => (String_Size => X'Last, Value => X),
-         Y      => (String_Size => Y'Last, Value => Y),
-         Z      => (String_Size => Z'Last, Value => Z));
-   end Create_Location;
+        (X_Offset => A.X_Offset + B.X_Offset,
+         Y_Offset => A.Y_Offset + B.Y_Offset,
+         Z_Offset => A.Z_Offset + B.Z_Offset);
+   end "+";
+
+   function Non_Space_Image (I : Integer) return String is
+   begin
+      if I < 0 then
+         return I'Image;
+      else
+         declare
+            Image : constant String := I'Image;
+         begin
+            return Image (Image'First + 1 .. Image'Last);
+         end;
+      end if;
+   end Non_Space_Image;
 
    procedure Set_Block
-     (C : Command_Computer; X : String; Y : String; Z : String; B : Material)
+     (C : Command_Computer; L : Relative_Location; B : Material)
    is
-   begin
-      Set_Block (C, Create_Location (X, Y, Z), B);
-   end Set_Block;
-
-   procedure Set_Block (C : Command_Computer; L : Location; B : Material) is
-   begin
       -- for example: commands.setblock('~20', '~', '~20', 'planks')
-      Raw_Procedure
-        (C.Dispatcher,
-         "commands.setblock('" & L.X.Value & "', '" & L.Y.Value & "', '" &
-         L.Z.Value & "', '" & B'Image & "')");
+      Command : constant String :=
+        "commands.setblock('~" & Non_Space_Image (L.X_Offset) & "', '~" &
+        Non_Space_Image (L.Y_Offset) & "', '~" & Non_Space_Image (L.Z_Offset) &
+        "', '" & B'Image & "')";
+   begin
+      Raw_Procedure (C.Dispatcher, Command);
    end Set_Block;
 
 end Adabots;
