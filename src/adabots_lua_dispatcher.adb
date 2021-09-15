@@ -160,18 +160,6 @@ package body Adabots_Lua_Dispatcher is
       raise Program_Error with Returned_String;
    end Boolean_Function;
 
-   function String_Function
-     (T : Lua_Dispatcher; Lua_Code : String) return String
-   is
-      Returned_String    : constant String := T.Raw_Function (Lua_Code);
-      String_Type_Prefix : constant String := "string: ";
-   begin
-      if Starts_With (Returned_String, String_Type_Prefix) then
-         return Strip_Prefix (Returned_String, String_Type_Prefix);
-      end if;
-      raise Program_Error with Returned_String;
-   end String_Function;
-
    procedure Raw_Procedure (T : Lua_Dispatcher; Lua_Code : String) is
       Result : String := Raw_Function (T, Lua_Code);
       pragma Unreferenced (Result);
