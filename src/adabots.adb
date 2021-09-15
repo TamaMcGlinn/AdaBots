@@ -303,6 +303,11 @@ package body Adabots is
          Z_Offset => A.Z_Offset + B.Z_Offset);
    end "+";
 
+   function "+" (A, B : Absolute_Location) return Absolute_Location is
+   begin
+      return (X => A.X + B.X, Y => A.Y + B.Y, Z => A.Z + B.Z);
+   end "+";
+
    function Non_Space_Image (I : Integer) return String is
    begin
       if I < 0 then
@@ -327,5 +332,17 @@ package body Adabots is
    begin
       Raw_Procedure (C.Dispatcher, Command);
    end Set_Block;
+
+   function Get_Block_Info
+     (C : Command_Computer; L : Absolute_Location) return Material
+   is
+      Command : constant String :=
+        "commands.getBlockInfo(" & Non_Space_Image (L.X) & ", " &
+        Non_Space_Image (L.Y) & ", " & Non_Space_Image (L.Z) & ").name";
+      Return_Value : constant String := Raw_Function (C.Dispatcher, Command);
+      Prefix       : constant String := "minecraft:";
+   begin
+      return Material'Value (Return_Value);
+   end Get_Block_Info;
 
 end Adabots;

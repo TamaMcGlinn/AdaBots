@@ -86,7 +86,8 @@ package Adabots is
    function Create_Command_Computer return Command_Computer;
    function Create_Command_Computer (Port : Integer) return Command_Computer;
 
-   type Material is (Grass, Planks, Air, Glass, Ice, Gold_Block);
+   type Material is
+     (Grass, Planks, Air, Glass, Ice, Gold_Block, Sand, Bedrock);
 
    type Relative_Location is record
       X_Offset : Integer := 0;
@@ -96,8 +97,19 @@ package Adabots is
 
    function "+" (A, B : Relative_Location) return Relative_Location;
 
+   type Absolute_Location is record
+      X : Integer := 0;
+      Y : Integer := 0;
+      Z : Integer := 0;
+   end record;
+
+   function "+" (A, B : Absolute_Location) return Absolute_Location;
+
    procedure Set_Block
      (C : Command_Computer; L : Relative_Location; B : Material);
+
+   function Get_Block_Info
+     (C : Command_Computer; L : Absolute_Location) return Material;
 
 private
 
