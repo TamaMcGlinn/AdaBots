@@ -1,5 +1,6 @@
 -- begin auto-gpr-with --
 --  This section was automatically added by Alire
+with "aaa.gpr";
 with "aws.gpr";
 with "xmlada.gpr";
 with "xmlada_dom.gpr";

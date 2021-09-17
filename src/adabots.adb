@@ -1,3 +1,5 @@
+with AAA.Strings;
+
 package body Adabots is
    use Adabots_Lua_Dispatcher;
 
@@ -342,7 +344,7 @@ package body Adabots is
       Return_Value : constant String := Raw_Function (C.Dispatcher, Command);
       Prefix       : constant String := "minecraft:";
    begin
-      return Material'Value (Return_Value);
+      return Material'Value (AAA.Strings.Replace (Return_Value, Prefix, ""));
    end Get_Block_Info;
 
 end Adabots;

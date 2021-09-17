@@ -6,6 +6,7 @@ with AWS.Status;
 with AWS.MIME;
 with AWS.Config;
 with AWS.Config.Set;
+with AAA.Strings;
 
 package body Adabots_Lua_Dispatcher is
 
@@ -36,14 +37,6 @@ package body Adabots_Lua_Dispatcher is
      (Awaiting_Command, Sending_Command, Fetching_Return_Value,
       Returning_Result, Stopping);
 
-   function Starts_With (Source, Pattern : String) return Boolean;
-   function Starts_With (Source, Pattern : String) return Boolean is
-   begin
-      return
-        Pattern'Length <= Source'Length
-        and then Source (Source'First .. Pattern'Length) = Pattern;
-   end Starts_With;
-
    function Strip_Prefix (Source, Prefix : String) return String;
    function Strip_Prefix (Source, Prefix : String) return String is
    begin
@@ -67,7 +60,7 @@ package body Adabots_Lua_Dispatcher is
             Fetch_Command (Command);
             return
               AWS.Response.Build (AWS.MIME.Text_Plain, To_String (Command));
-         elsif Starts_With (URI, Return_Value_Prefix) then
+         elsif AAA.Strings.Has_Prefix (URI, Return_Value_Prefix) then
             Push_Return_Value (Strip_Prefix (URI, Return_Value_Prefix));
             return
               AWS.Response.Build
@@ -140,7 +133,7 @@ package body Adabots_Lua_Dispatcher is
       declare
          String_Result : constant String := To_String (Returned_String);
       begin
-         if Starts_With (String_Result, "error: ") then
+         if AAA.Strings.Has_Prefix (String_Result, "error: ") then
             raise Program_Error with String_Result;
          end if;
          return String_Result;
