@@ -87,7 +87,7 @@ package Adabots is
    function Create_Command_Computer (Port : Integer) return Command_Computer;
 
    type Material is
-     (Grass, Planks, Air, Glass, Ice, Gold_Block, Sand, Bedrock);
+     (Grass, Planks, Air, Glass, Ice, Gold_Block, Sand, Bedrock, Stone);
 
    type Relative_Location is record
       X_Offset : Integer := 0;
@@ -95,7 +95,11 @@ package Adabots is
       Z_Offset : Integer := 0;
    end record;
 
+   function Image (P : Relative_Location) return String is
+     (P.X_Offset'Image & ", " & P.Y_Offset'Image & ", " & P.Z_Offset'Image);
+
    function "+" (A, B : Relative_Location) return Relative_Location;
+   function "-" (A, B : Relative_Location) return Relative_Location;
 
    type Absolute_Location is record
       X : Integer := 0;
@@ -105,8 +109,19 @@ package Adabots is
 
    function "+" (A, B : Absolute_Location) return Absolute_Location;
 
-   procedure Set_Block
+   function "+"
+     (A : Absolute_Location; B : Relative_Location) return Absolute_Location;
+
+   function Set_Block
+     (C : Command_Computer; L : Relative_Location; B : Material)
+      return Boolean;
+
+   procedure Maybe_Set_Block
      (C : Command_Computer; L : Relative_Location; B : Material);
+
+   procedure Set_Cube
+     (C    : Command_Computer; First : Relative_Location;
+      Last : Relative_Location; B : Material);
 
    function Get_Block_Info
      (C : Command_Computer; L : Absolute_Location) return Material;

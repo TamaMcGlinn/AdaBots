@@ -305,9 +305,25 @@ package body Adabots is
          Z_Offset => A.Z_Offset + B.Z_Offset);
    end "+";
 
+   function "-" (A, B : Relative_Location) return Relative_Location is
+   begin
+      return
+        (X_Offset => A.X_Offset - B.X_Offset,
+         Y_Offset => A.Y_Offset - B.Y_Offset,
+         Z_Offset => A.Z_Offset - B.Z_Offset);
+   end "-";
+
    function "+" (A, B : Absolute_Location) return Absolute_Location is
    begin
       return (X => A.X + B.X, Y => A.Y + B.Y, Z => A.Z + B.Z);
+   end "+";
+
+   function "+"
+     (A : Absolute_Location; B : Relative_Location) return Absolute_Location
+   is
+   begin
+      return
+        (X => A.X + B.X_Offset, Y => A.Y + B.Y_Offset, Z => A.Z + B.Z_Offset);
    end "+";
 
    function Non_Space_Image (I : Integer) return String is
@@ -323,8 +339,8 @@ package body Adabots is
       end if;
    end Non_Space_Image;
 
-   procedure Set_Block
-     (C : Command_Computer; L : Relative_Location; B : Material)
+   function Set_Block
+     (C : Command_Computer; L : Relative_Location; B : Material) return Boolean
    is
       -- for example: commands.setblock('~20', '~', '~20', 'planks')
       Command : constant String :=
@@ -332,8 +348,31 @@ package body Adabots is
         Non_Space_Image (L.Y_Offset) & "', '~" & Non_Space_Image (L.Z_Offset) &
         "', '" & B'Image & "')";
    begin
-      Raw_Procedure (C.Dispatcher, Command);
+      return Boolean_Function (C.Dispatcher, Command);
    end Set_Block;
+
+   procedure Maybe_Set_Block
+     (C : Command_Computer; L : Relative_Location; B : Material)
+   is
+      Result : constant Boolean := Set_Block (C, L, B);
+      pragma Unreferenced (Result);
+   begin
+      null;
+   end Maybe_Set_Block;
+
+   procedure Set_Cube
+     (C    : Command_Computer; First : Relative_Location;
+      Last : Relative_Location; B : Material)
+   is
+   begin
+      for Y in reverse First.Y_Offset .. Last.Y_Offset loop
+         for X in First.X_Offset .. Last.X_Offset loop
+            for Z in First.Z_Offset .. Last.Z_Offset loop
+               Maybe_Set_Block (C, (X, Y, Z), B);
+            end loop;
+         end loop;
+      end loop;
+   end Set_Cube;
 
    function Get_Block_Info
      (C : Command_Computer; L : Absolute_Location) return Material
