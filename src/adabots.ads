@@ -1,13 +1,15 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Finalization;
+with Adabots_Lua_Dispatcher;
 
 package Adabots is
+
    type Turtle is new Ada.Finalization.Limited_Controlled with private;
    type Turtle_Inventory_Slot is range 1 .. 16;
    type Stack_Count is range 0 .. 64;
    type Item_Detail is record
       Count : Stack_Count;
-      Name  : Unbounded_String;
+      Name  : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    function Create_Turtle return Turtle;
@@ -78,32 +80,62 @@ package Adabots is
    procedure Maybe_Place_Down (T : Turtle);
    procedure Maybe_Place_Up (T : Turtle);
 
-private
+   type Command_Computer is
+     new Ada.Finalization.Limited_Controlled with private;
 
-   task type Command_Server (Port : Integer) is
-      entry Schedule_Command (Command : String);
-      entry Fetch_Command (Command : out Unbounded_String);
-      entry Push_Return_Value (Return_Value : String);
-      entry Get_Result (Result : out Unbounded_String);
-      entry Shutdown;
-   end Command_Server;
+   function Create_Command_Computer return Command_Computer;
+   function Create_Command_Computer (Port : Integer) return Command_Computer;
 
-   type Access_Command_Server is access Command_Server;
+   type Material is
+     (Grass, Planks, Air, Glass, Ice, Gold_Block, Sand, Bedrock, Stone);
 
-   type Turtle is new Ada.Finalization.Limited_Controlled with record
-      Server : Access_Command_Server;
+   type Relative_Location is record
+      X_Offset : Integer := 0;
+      Y_Offset : Integer := 0;
+      Z_Offset : Integer := 0;
    end record;
 
-   overriding procedure Finalize (T : in out Turtle);
+   function Image (P : Relative_Location) return String is
+     (P.X_Offset'Image & ", " & P.Y_Offset'Image & ", " & P.Z_Offset'Image);
 
-   function Raw_Function (T : Turtle; Lua_Code : String) return String;
+   function "+" (A, B : Relative_Location) return Relative_Location;
+   function "-" (A, B : Relative_Location) return Relative_Location;
 
-   function Boolean_Function (T : Turtle; Lua_Code : String) return Boolean;
+   type Absolute_Location is record
+      X : Integer := 0;
+      Y : Integer := 0;
+      Z : Integer := 0;
+   end record;
 
-   function String_Function (T : Turtle; Lua_Code : String) return String;
+   function "+" (A, B : Absolute_Location) return Absolute_Location;
 
-   procedure Turtle_Procedure (T : Turtle; Lua_Code : String);
+   function "+"
+     (A : Absolute_Location; B : Relative_Location) return Absolute_Location;
+
+   function Set_Block
+     (C : Command_Computer; L : Relative_Location; B : Material)
+      return Boolean;
+
+   procedure Maybe_Set_Block
+     (C : Command_Computer; L : Relative_Location; B : Material);
+
+   procedure Set_Cube
+     (C    : Command_Computer; First : Relative_Location;
+      Last : Relative_Location; B : Material);
+
+   function Get_Block_Info
+     (C : Command_Computer; L : Absolute_Location) return Material;
+
+private
+
+   type Turtle is new Ada.Finalization.Limited_Controlled with record
+      Dispatcher : Adabots_Lua_Dispatcher.Lua_Dispatcher;
+   end record;
 
    function Parse_Item_Details (Table : String) return Item_Detail;
+
+   type Command_Computer is new Ada.Finalization.Limited_Controlled with record
+      Dispatcher : Adabots_Lua_Dispatcher.Lua_Dispatcher;
+   end record;
 
 end Adabots;
