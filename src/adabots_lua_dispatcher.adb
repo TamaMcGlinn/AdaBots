@@ -10,22 +10,6 @@ with AAA.Strings;
 
 package body Adabots_Lua_Dispatcher is
 
-   function Create_Lua_Dispatcher return Lua_Dispatcher is
-      Default_Port : constant := 7_112;
-   begin
-      Ada.Text_IO.Put_Line
-        ("Which port should I output on? (default:" & Default_Port'Image &
-         ")");
-      Ada.Text_IO.Put ("> ");
-      declare
-         T : constant String  := Ada.Text_IO.Get_Line;
-         P : constant Integer :=
-           (if T = "" then Default_Port else Integer'Value (T));
-      begin
-         return Create_Lua_Dispatcher (P);
-      end;
-   end Create_Lua_Dispatcher;
-
    function Create_Lua_Dispatcher (Port : Integer) return Lua_Dispatcher is
    begin
       return
