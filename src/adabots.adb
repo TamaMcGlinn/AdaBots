@@ -1,3 +1,4 @@
+with Ada.Text_IO;
 with AAA.Strings;
 
 package body Adabots is
@@ -5,11 +6,24 @@ package body Adabots is
 
    --  public:
 
+   function Ask_User_For_Port return Integer is
+   begin
+      Ada.Text_IO.Put_Line
+        ("Which port should I output on? (default:" & Default_Port'Image &
+         ")");
+      Ada.Text_IO.Put ("> ");
+      declare
+         T : constant String  := Ada.Text_IO.Get_Line;
+         P : constant Integer :=
+           (if T = "" then Default_Port else Integer'Value (T));
+      begin
+         return P;
+      end;
+   end Ask_User_For_Port;
+
    function Create_Turtle return Turtle is
    begin
-      return
-        (Ada.Finalization.Limited_Controlled with
-         Dispatcher => Create_Lua_Dispatcher);
+      return Create_Turtle (Default_Port);
    end Create_Turtle;
 
    function Create_Turtle (Port : Integer) return Turtle is
@@ -285,9 +299,7 @@ package body Adabots is
 
    function Create_Command_Computer return Command_Computer is
    begin
-      return
-        (Ada.Finalization.Limited_Controlled with
-         Dispatcher => Create_Lua_Dispatcher);
+      return Create_Command_Computer (Default_Port);
    end Create_Command_Computer;
 
    function Create_Command_Computer (Port : Integer) return Command_Computer is

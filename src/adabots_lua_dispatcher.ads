@@ -5,7 +5,6 @@ package Adabots_Lua_Dispatcher is
 
    type Lua_Dispatcher is new Ada.Finalization.Limited_Controlled with private;
 
-   function Create_Lua_Dispatcher return Lua_Dispatcher;
    function Create_Lua_Dispatcher (Port : Integer) return Lua_Dispatcher;
 
    function Raw_Function (T : Lua_Dispatcher; Lua_Code : String) return String;

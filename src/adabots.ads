@@ -12,6 +12,9 @@ package Adabots is
       Name  : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
+   Default_Port : constant := 7_112;
+
+   function Ask_User_For_Port return Integer;
    function Create_Turtle return Turtle;
    function Create_Turtle (Port : Integer) return Turtle;
 
