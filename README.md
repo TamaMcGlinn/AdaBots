@@ -45,7 +45,14 @@ as a course syllabus.
 
 There is a collection of example programs [here](https://github.com/TamaMcGlinn/AdaBots_examples).
 
-## Install instructions (minecraft)
+
+## Minetest install instructions
+
+You can use either minecraft or minetest to run a commandlistener for Adabots programs.
+If using minetest, install [minetest-adabots](https://github.com/TamaMcGlinn/minetest-adabots) and follow its README.
+In that case of course you can skip the Minecraft install instructions below, and read on from "Ada environment".
+
+## Minecraft install instructions
 
 On the minecraft side of things, you need the following one-time setup:
 
@@ -149,19 +156,15 @@ For the compiler and development environment,
 go to [AdaCore.com > Community > Download](https://www.adacore.com/download)
 And run the installer for your platform.
 
-Finally, run GPS and open adabots.gpr to edit the code.
+Clone (and fork) the [Adabots_examples repo](https://github.com/TamaMcGlinn/adabots_examples) to have a project up and running quickly.
+Just open adabots_examples.gpr in GNAT.
 
 ### Compile & Run
 
-Open a terminal in the examples/ directory, and issue `make`.
+Open a terminal and issue `make`. It should be around ten minutes the first time, but should only take seconds afterwards.
+
 To start the program, do `./bin/[program_name]`.
-Assuming httpslave is already running on a turtle,
+
+Assuming httpslave is already running on a minecraft turtle,
+or `turtle:listen()` on a minetest turtle,
 it should start moving.
-
-## Your own project
-
-You can copy the examples/ directory as a starting point for your own
-Adabots program. Thanks to the Alire Ada package manager, it will
-work just the same if you put it elsewhere, and allows you to
-automatically update to backwards compatible future releases of Adabots.
-
