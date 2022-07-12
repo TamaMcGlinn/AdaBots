@@ -84,7 +84,7 @@ are presented with the main game menu.
 
 The minecraft directory is 
 
-- Windows => %appdata%\.minecraft\
+- Windows => %appdata%\\.minecraft\
 - Mac     => ~/Library/Application Support/minecraft/
 - Linux   => ~/.minecraft/
 
@@ -149,7 +149,7 @@ Ada program.
 For Ada programming, you will need to install:
 
 - An Ada Compiler
-- A development environment such as GPS
+- A development environment such as GPS (GNAT Programming Studio)
 - [Alire (alr)](https://alire.ada.dev/)
 
 For the compiler and development environment,
@@ -157,7 +157,7 @@ go to [AdaCore.com > Community > Download](https://www.adacore.com/download)
 And run the installer for your platform.
 
 Clone (and fork) the [Adabots_examples repo](https://github.com/TamaMcGlinn/adabots_examples) to have a project up and running quickly.
-Just open adabots_examples.gpr in GNAT.
+Just open adabots_examples.gpr in GPS (GNAT Programming Studio).
 
 ### Compile & Run
 
