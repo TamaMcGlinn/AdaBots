@@ -63,8 +63,8 @@ do step 6 - Configure computercraft to allow http. DoBots uses a slightly older 
 keyboards - while AdaBots doesn't use keyboards, you may still want to use Plethora for its other peripherals.
 
 Currently the latest supported version is Minecraft and
-[Minecraft Forge 1.16.4](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.16.4.html)
-with [CC:Tweaked 1.96.0](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked/files)
+[Minecraft Forge 1.18.2-40.1.60](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.18.2.html)
+with [CC:Tweaked 1.18.2-1.100.8](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked/files/3845705).
 
 ### 2) Install [minecraft](https://minecraft.net/)
 
