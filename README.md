@@ -44,7 +44,7 @@ as a course syllabus.
 # Example programs
 
 There is a collection of example programs [here](https://github.com/TamaMcGlinn/AdaBots_examples).
-
+I recommend you use them as a starting point for using AdaBots.
 
 ## Minetest install instructions
 
@@ -136,11 +136,11 @@ If that file doesn't exist, you may instead need to find the following in config
 
 And remove the blocked domains.
 
-### 6) Copy (or symlink) lua/httpslave onto the turtle
+### 6) Copy (or symlink) lua/listen.lua onto the turtle
 
 In the minecraft directory, under saves/[save_name]/computercraft/computer/ there is a numbered
-directory for every turtle in computercraft. You can copy lua/httpslave into that directory,
-and then issue `httpslave` on the turtle's terminal. It will ask for an IP and port to listen to;
+directory for every turtle in computercraft. You can copy lua/listen.lua into that directory,
+and then issue `listen.lua` on the turtle's terminal. It will ask for an IP and port to listen to;
 press enter for the default. If you want multiple turtles, give each a different port in your
 Ada program.
 
@@ -165,6 +165,6 @@ Open a terminal and issue `make`. It should be around ten minutes the first time
 
 To start the program, do `./bin/[program_name]`.
 
-Assuming httpslave is already running on a minecraft turtle,
+Assuming listen.lua is already running on a minecraft turtle,
 or `turtle:listen()` on a minetest turtle,
 it should start moving.
