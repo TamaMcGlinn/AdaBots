@@ -104,13 +104,6 @@ You may also wish to enter these commands in-game to avoid distractions:
 With cheats enabled, you can type `/give [yourname] computercraft:turtle_normal` (with tab-completion).
 If you [craft it](https://www.minecraft-crafting.net/) beside a diamond pickaxe, you get a mining turtle which can also dig.
 
-Place it and right click it to open an in-game terminal on the turtle. Issue this command to give
-the turtle a name, and also to create the turtle's program directory:
-
-```
-label set [name]
-```
-
 Inside the minecraft directory, edit saves/[save_name]/serverconfig/computercraft-server.toml:
 
 - Remove all [[http.rules]] blocks that say 'deny'
@@ -136,11 +129,23 @@ If that file doesn't exist, you may instead need to find the following in config
 
 And remove the blocked domains.
 
-### 6) Copy (or symlink) lua/listen.lua onto the turtle
+### 6) Copy, symlink or pastebin-get lua/listen.lua onto the turtle
+
+Right click the turtle to open an in-game terminal. Issue this command to download and then execute listen:
+
+```
+pastebin get A9tniRA9 listen
+```
+
+That's the easiest way, but alternatively you can copy or symlink the file manually.
 
 In the minecraft directory, under saves/[save_name]/computercraft/computer/ there is a numbered
-directory for every turtle in computercraft. You can copy lua/listen.lua into that directory,
-and then issue `listen.lua` on the turtle's terminal. It will ask for an IP and port to listen to;
+directory for every turtle in computercraft. If not, you need to give the turtle a label first by
+issuing `label set [name]` on the turtle, and then `edit somefile` and save the file. This will create
+the turtle's directory, and you can copy or symlink lua/listen.lua into that directory,
+and then issue `listen.lua` on the turtle's terminal. 
+
+It will ask for an IP and port to listen to;
 press enter for the default. If you want multiple turtles, give each a different port in your
 Ada program.
 
