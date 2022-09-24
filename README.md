@@ -48,7 +48,8 @@ You will need:
 
 You can use either Minecraft or Minetest to run a commandlistener for AdaBots programs.
 
-I recommend using Minecraft for this; [Minecraft AdaBots installation instructions here](docs/minecraft_installation.md).
+I recommend using Minecraft for this; either connect to a server with ComputerCraft already installed,
+or [install Adabots in single-player](docs/minecraft_installation.md).
 Currently, the minetest implementation is early Work-In-Progress; movement, digging and block placement works, but expect bugs.
 [Minetest installation instructions here](docs/minetest_installation.md).
 
