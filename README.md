@@ -28,7 +28,7 @@ but confusing `}` in most programming languages, disallows all implicit type con
 its simple tasking and rendez-vous idiom. Since you can create tasks and multiple turtles in a single
 program, you could explain these concepts intuitively using AdaBots.
 
-In addition, the GCC Ada compiler is an unusually helpful one, saying things like:
+In addition, the Ada compiler is an unusually helpful one, saying things like:
 
 ```
 lovelace.adb:10:04: warning: variable "Blocks" is never read and never assigned
@@ -37,139 +37,56 @@ lovelace.adb:20:30: error: "Dat" is undefined
 lovelace.adb:20:30: error: possible misspelling of "Data"
 ```
 
-To teach (children) using AdaBots, you need at least a basic understanding of Ada. I recommend
-the AdaCore [Introduction to Ada](https://learn.adacore.com/courses/intro-to-ada/) (html / pdf)
-as a course syllabus.
+# Getting started
 
-# Example programs
+You will need:
 
-There is a collection of example programs [here](https://github.com/TamaMcGlinn/AdaBots_examples).
-I recommend you use them as a starting point for using AdaBots.
+- A minecraft or minetest installation
+- An Ada development environment
 
-## Minetest install instructions
+## Minecraft / Minetest install instructions
 
-You can use either minecraft or minetest to run a commandlistener for Adabots programs.
-If using minetest, install [minetest-adabots](https://github.com/TamaMcGlinn/minetest-adabots) and follow its README.
-In that case of course you can skip the Minecraft install instructions below, and read on from "Ada environment".
+You can use either Minecraft or Minetest to run a commandlistener for AdaBots programs.
 
-## Minecraft install instructions
-
-On the minecraft side of things, you need the following one-time setup:
-
-### 1) Choose latest versions of the following that work together
-
-Note: If you already installed [DoBots](http://github.com/TamaMcGlinn/DoBots), that should work fine for AdaBots as well. You only need to
-do step 6 - Configure computercraft to allow http. DoBots uses a slightly older version of Minecraft in order to support Plethora for
-keyboards - while AdaBots doesn't use keyboards, you may still want to use Plethora for its other peripherals.
-
-Currently the latest supported version is Minecraft and
-[Minecraft Forge 1.18.2-40.1.60](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.18.2.html)
-with [CC:Tweaked 1.18.2-1.100.8](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked/files/3845705).
-
-### 2) Install [minecraft](https://minecraft.net/)
-
-You will need to purchase the game.
-
-### 3) Install [minecraft forge](https://files.minecraftforge.net/net/minecraftforge/forge/)
-
-Download the installer for your operating system and minecraft version. Run it:
-
-- on linux, issue `java -jar ~/Downloads/forge-*.jar` on the terminal
-- on windows or mac, double-click the jar file
-
-Select the forge game version in the launcher and press play, letting it load until you
-are presented with the main game menu.
-
-### 4) Install [CC:Tweaked](https://www.curseforge.com/minecraft/mc-mods/cc-tweaked)
-
-The minecraft directory is 
-
-- Windows => %appdata%\\.minecraft\
-- Mac     => ~/Library/Application Support/minecraft/
-- Linux   => ~/.minecraft/
-
-It contains mods/, and you should put the cc-tweaked .jar file in there and restart.
-
-### 5) Give yourself a turtle in-game
-
-I recommend you create a survival mode world set to peaceful with cheats enabled. 
-You may also wish to enter these commands in-game to avoid distractions:
-
-```
-/gamerule doDayNightCycle off
-/time set day
-/weather clear
-```
-
-With cheats enabled, you can type `/give [yourname] computercraft:turtle_normal` (with tab-completion).
-If you [craft it](https://www.minecraft-crafting.net/) beside a diamond pickaxe, you get a mining turtle which can also dig.
-
-Inside the minecraft directory, edit saves/[save_name]/serverconfig/computercraft-server.toml:
-
-- Remove all [[http.rules]] blocks that say 'deny'
-- (optional) Set need_fuel = false so that turtles can move without fuel
-
-Note: I am going to assume you set need_fuel = false. The provided example programs won't run
-if you left this at true and didn't manually refuel the turtles.
-
-If that file doesn't exist, you may instead need to find the following in config/computercraft.cfg:
-
-```
-    # A list of wildcards for domains or IP ranges that cannot be accessed through the "http" API on Computers.
-    # If this is empty then all explicitly allowed domains will be accessible. Example: "*.github.com" will block access to all subdomains of github.com.
-    # You can use domain names ("pastebin.com"), wildcards ("*.pastebin.com") or CIDR notation ("127.0.0.0/8").
-    S:blocked_domains <
-        127.0.0.0/8
-        10.0.0.0/8
-        172.16.0.0/12
-        192.168.0.0/16
-        fd00::/8
-     >
-```
-
-And remove the blocked domains.
-
-### 6) Copy, symlink or pastebin-get lua/listen.lua onto the turtle
-
-Right click the turtle to open an in-game terminal. Issue this command to download and then execute listen:
-
-```
-pastebin get A9tniRA9 listen
-```
-
-That's the easiest way, but alternatively you can copy or symlink the file manually.
-
-In the minecraft directory, under saves/[save_name]/computercraft/computer/ there is a numbered
-directory for every turtle in computercraft. If not, you need to give the turtle a label first by
-issuing `label set [name]` on the turtle, and then `edit somefile` and save the file. This will create
-the turtle's directory, and you can copy or symlink lua/listen.lua into that directory,
-and then issue `listen.lua` on the turtle's terminal. 
-
-It will ask for an IP and port to listen to;
-press enter for the default. If you want multiple turtles, give each a different port in your
-Ada program.
+I recommend using Minecraft for this; [Minecraft AdaBots installation instructions here](docs/minecraft_installation.md).
+Currently, the minetest implementation is early Work-In-Progress; movement, digging and block placement works, but expect bugs.
+[Minetest installation instructions here](docs/minetest_installation.md).
 
 ## Ada environment
 
 For Ada programming, you will need to install:
 
-- An Ada Compiler
-- A development environment such as GPS (GNAT Programming Studio)
+- An Ada compiler ([run the installer for your platform here](https://www.adacore.com/download))
+- An IDE ([details here](docs/ide.md))
 - [Alire (alr)](https://alire.ada.dev/)
 
-For the compiler and development environment,
-go to [AdaCore.com > Community > Download](https://www.adacore.com/download)
-And run the installer for your platform.
-
-Clone (and fork) the [Adabots_examples repo](https://github.com/TamaMcGlinn/adabots_examples) to have a project up and running quickly.
-Just open adabots_examples.gpr in GPS (GNAT Programming Studio).
+Clone the [AdaBots_examples repo](https://github.com/TamaMcGlinn/adabots_examples) to have a project up and running quickly.
+Just open adabots_examples.gpr and src/build_wall.adb in your IDE.
 
 ### Compile & Run
 
 Open a terminal and issue `make`. It should be around ten minutes the first time, but should only take seconds afterwards.
 
-To start the program, do `./bin/[program_name]`.
+To start the program, run `./bin/[program_name]` in a terminal.
 
-Assuming listen.lua is already running on a minecraft turtle,
-or `turtle:listen()` on a minetest turtle,
-it should start moving.
+Assuming listen is already running on a minecraft turtle, or `turtle:listen()` on a minetest turtle, it should start moving.
+
+## What to do?
+
+Now that everything is working, you need something to do. If you are on your own, set yourself some goals:
+
+- build a staircase down (3 blocks tall, so you can follow!), and then
+- a cavern of 10 x 10, 3 blocks tall
+
+Or, on the surface, build yourself a house, a tower, or a castle. The sky and bedrock are the limits!
+
+### Ada basics
+
+To teach (children) using AdaBots, you need at least a basic understanding of programming (not necessarily with Ada).
+I recommend the AdaCore [Introduction to Ada](https://learn.adacore.com/courses/intro-to-ada/) (html / pdf)
+as a course syllabus. Next, you need to stay one lesson ahead of your pupils by experimenting yourself first.
+
+### Read the example programs
+
+There is a collection of example programs [here](https://github.com/TamaMcGlinn/AdaBots_examples).
+I recommend you use them as a starting point for using AdaBots.
