@@ -1,6 +1,6 @@
 name = "adabots"
 description = "Learn Ada by programming Minecraft robots"
-version = "1.2.0"
+version = "1.3.0"
 
 authors = ["Tama McGlinn"]
 maintainers = ["Tama McGlinn <t.mcglinn@gmail.com>"]
@@ -11,7 +11,7 @@ project-files = ["adabots.gpr"]
 tags = ["learn", "ada", "minecraft", "computercraft", "robots", "teach", "children"]
 
 [[depends-on]]  # This line was added by `alr with`
-aws = "^21.0.0"  # This line was added by `alr with`
+aws = "^23.0.0"  # This line was added by `alr with`
 
 [[depends-on]]  # This line was added by `alr with`
 aaa = "~0.2.3"  # This line was added by `alr with`
