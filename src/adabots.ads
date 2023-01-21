@@ -57,6 +57,10 @@ package Adabots is
    function Detect_Down (T : Turtle) return Boolean;
    function Detect_Up (T : Turtle) return Boolean;
 
+   function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean;
+   function Suck_Down (T : Turtle; Amount : Stack_Count := 64) return Boolean;
+   function Suck_Up (T : Turtle; Amount : Stack_Count := 64) return Boolean;
+
    --  these procedures assert that the function of the same name returned true
 
    procedure Forward (T : Turtle);
@@ -82,6 +86,10 @@ package Adabots is
    procedure Maybe_Place (T : Turtle);
    procedure Maybe_Place_Down (T : Turtle);
    procedure Maybe_Place_Up (T : Turtle);
+
+   procedure Suck (T : Turtle; Amount : Stack_Count := 64);
+   procedure Suck_Down (T : Turtle; Amount : Stack_Count := 64);
+   procedure Suck_Up (T : Turtle; Amount : Stack_Count := 64);
 
    type Command_Computer is
      new Ada.Finalization.Limited_Controlled with private;
