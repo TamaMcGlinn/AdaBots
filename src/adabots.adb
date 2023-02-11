@@ -154,6 +154,16 @@ package body Adabots is
       return Boolean_Function (T.Dispatcher, "turtle.detectUp()");
    end Detect_Up;
 
+   function Detect_Left (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T.Dispatcher, "turtle.detectLeft()");
+   end Detect_Left;
+
+   function Detect_Right (T : Turtle) return Boolean is
+   begin
+      return Boolean_Function (T.Dispatcher, "turtle.detectRight()");
+   end Detect_Right;
+
    function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin
       return Boolean_Function (T.Dispatcher, "turtle.suck(" & Amount'Image & ")");

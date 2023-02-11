@@ -56,6 +56,9 @@ package Adabots is
    function Detect (T : Turtle) return Boolean;
    function Detect_Down (T : Turtle) return Boolean;
    function Detect_Up (T : Turtle) return Boolean;
+   function Detect_Left (T : Turtle) return Boolean;
+   function Detect_Right (T : Turtle) return Boolean;
+
 
    function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean;
    function Suck_Down (T : Turtle; Amount : Stack_Count := 64) return Boolean;
