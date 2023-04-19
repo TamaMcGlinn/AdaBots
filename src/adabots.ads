@@ -8,6 +8,7 @@ package Adabots is
    type Turtle is new Ada.Finalization.Limited_Controlled with private;
    type Turtle_Inventory_Slot is range 1 .. 16;
    type Stack_Count is range 0 .. 64;
+   type Positive_Stack_Count is range 1 .. 64;
    type Item_Detail is record
       Count : Stack_Count;
       Name  : Ada.Strings.Unbounded.Unbounded_String;
@@ -80,6 +81,9 @@ package Adabots is
    procedure Place (T : Turtle);
    procedure Place_Down (T : Turtle);
    procedure Place_Up (T : Turtle);
+
+   function Craft (T : Turtle; Amount : Positive_Stack_Count := 1) return Boolean;
+   procedure Craft (T : Turtle; Amount : Positive_Stack_Count := 1);
 
    procedure Drop (T : Turtle; Amount : Stack_Count := 64);
 

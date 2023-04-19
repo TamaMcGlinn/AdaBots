@@ -4,6 +4,22 @@ with Aaa.Strings;
 package body Adabots is
    use Adabots_Lua_Dispatcher;
 
+   -- private
+
+   function Non_Space_Image (I : Integer) return String is
+   begin
+      if I < 0
+      then
+         return I'Image;
+      else
+         declare
+            Image : constant String := I'Image;
+         begin
+            return Image (Image'First + 1 .. Image'Last);
+         end;
+      end if;
+   end Non_Space_Image;
+
    --  public:
 
    function Ask_User_For_Port return Integer is
@@ -263,6 +279,18 @@ package body Adabots is
       end if;
    end Place_Up;
 
+   function Craft (T : Turtle; Amount : Positive_Stack_Count := 1) return Boolean is
+     (Boolean_Function (T.Dispatcher, "turtle.craft(" & Amount'Image & ")"));
+
+   procedure Craft (T : Turtle; Amount : Positive_Stack_Count := 1) is
+      Result : constant Boolean := Craft (T, Amount);
+   begin
+      if Result = False
+      then
+         raise Program_Error with "Turtle.Craft(" & Amount'Image & ") returned False";
+      end if;
+   end Craft;
+
    procedure Drop (T : Turtle; Amount : Stack_Count := 64) is
       Result : constant Boolean := Drop (T, Amount);
    begin
@@ -389,20 +417,6 @@ package body Adabots is
          Y => A.Y + B.Y_Offset,
          Z => A.Z + B.Z_Offset);
    end "+";
-
-   function Non_Space_Image (I : Integer) return String is
-   begin
-      if I < 0
-      then
-         return I'Image;
-      else
-         declare
-            Image : constant String := I'Image;
-         begin
-            return Image (Image'First + 1 .. Image'Last);
-         end;
-      end if;
-   end Non_Space_Image;
 
    function Set_Block (C : Command_Computer; L : Relative_Location; B : Material) return Boolean is
       -- for example: commands.setblock('~20', '~', '~20', 'planks')
