@@ -1,6 +1,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Finalization;
 with Adabots_Lua_Dispatcher;
+with Adabots_Nodetypes;
 
 package Adabots is
 
@@ -59,6 +60,9 @@ package Adabots is
    function Detect_Left (T : Turtle) return Boolean;
    function Detect_Right (T : Turtle) return Boolean;
 
+   function Inspect (T : Turtle) return Adabots_Nodetypes.Node;
+   function Inspect_Down (T : Turtle) return Adabots_Nodetypes.Node;
+   function Inspect_Up (T : Turtle) return Adabots_Nodetypes.Node;
 
    function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean;
    function Suck_Down (T : Turtle; Amount : Stack_Count := 64) return Boolean;

@@ -164,6 +164,10 @@ package body Adabots is
       return Boolean_Function (T.Dispatcher, "turtle.detectRight()");
    end Detect_Right;
 
+   function Inspect (T : Turtle) return Adabots_Nodetypes.Node is (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspect()")));
+   function Inspect_Down (T : Turtle) return Adabots_Nodetypes.Node is (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspectDown()")));
+   function Inspect_Up (T : Turtle) return Adabots_Nodetypes.Node is (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspect()")));
+
    function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin
       return Boolean_Function (T.Dispatcher, "turtle.suck(" & Amount'Image & ")");
