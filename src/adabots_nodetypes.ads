@@ -2082,7 +2082,7 @@ package Adabots_Nodetypes is
       Xpanes_Pane_Yellow,
       Xpanes_Pane_Yellow_Flat);
 
-   -- given minetest node identifier such as "adabots:turtle", returns corresponding enum value
+      -- given minetest node identifier such as "adabots:turtle", returns corresponding enum value
    function Convert (Value : String) return Node;
 
    -- given Ada node type enum, returns minetest node identifier such as "adabots:turtle"

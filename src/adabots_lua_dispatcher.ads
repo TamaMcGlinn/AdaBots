@@ -8,8 +8,7 @@ package Adabots_Lua_Dispatcher is
    function Create_Lua_Dispatcher (Port : Integer) return Lua_Dispatcher;
 
    function Raw_Function (T : Lua_Dispatcher; Lua_Code : String) return String;
-   function Boolean_Function
-     (T : Lua_Dispatcher; Lua_Code : String) return Boolean;
+   function Boolean_Function (T : Lua_Dispatcher; Lua_Code : String) return Boolean;
    procedure Raw_Procedure (T : Lua_Dispatcher; Lua_Code : String);
 
 private

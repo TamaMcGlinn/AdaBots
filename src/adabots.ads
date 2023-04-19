@@ -40,14 +40,12 @@ package Adabots is
 
    -- Inventory management
    procedure Select_Slot (T : Turtle; Slot : Turtle_Inventory_Slot);
-   function Get_Item_Count
-     (T : Turtle; Slot : Turtle_Inventory_Slot) return Stack_Count;
+   function Get_Item_Count (T : Turtle; Slot : Turtle_Inventory_Slot) return Stack_Count;
    function Get_Selected_Slot (T : Turtle) return Turtle_Inventory_Slot;
 
    -- TODO really implement these two:
    function Get_Item_Detail (T : Turtle) return Item_Detail;
-   function Get_Item_Detail
-     (T : Turtle; Slot : Turtle_Inventory_Slot) return Item_Detail;
+   function Get_Item_Detail (T : Turtle; Slot : Turtle_Inventory_Slot) return Item_Detail;
 
    --  https://tweaked.cc/module/turtle.html#v:drop
    function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean;
@@ -98,14 +96,21 @@ package Adabots is
    procedure Suck_Down (T : Turtle; Amount : Stack_Count := 64);
    procedure Suck_Up (T : Turtle; Amount : Stack_Count := 64);
 
-   type Command_Computer is
-     new Ada.Finalization.Limited_Controlled with private;
+   type Command_Computer is new Ada.Finalization.Limited_Controlled with private;
 
    function Create_Command_Computer return Command_Computer;
    function Create_Command_Computer (Port : Integer) return Command_Computer;
 
    type Material is
-     (Grass, Planks, Air, Glass, Ice, Gold_Block, Sand, Bedrock, Stone);
+     (Grass,
+      Planks,
+      Air,
+      Glass,
+      Ice,
+      Gold_Block,
+      Sand,
+      Bedrock,
+      Stone);
 
    type Relative_Location is record
       X_Offset : Integer := 0;
@@ -127,22 +132,16 @@ package Adabots is
 
    function "+" (A, B : Absolute_Location) return Absolute_Location;
 
-   function "+"
-     (A : Absolute_Location; B : Relative_Location) return Absolute_Location;
+   function "+" (A : Absolute_Location; B : Relative_Location) return Absolute_Location;
 
-   function Set_Block
-     (C : Command_Computer; L : Relative_Location; B : Material)
-      return Boolean;
+   function Set_Block (C : Command_Computer; L : Relative_Location; B : Material) return Boolean;
 
-   procedure Maybe_Set_Block
-     (C : Command_Computer; L : Relative_Location; B : Material);
+   procedure Maybe_Set_Block (C : Command_Computer; L : Relative_Location; B : Material);
 
    procedure Set_Cube
-     (C    : Command_Computer; First : Relative_Location;
-      Last : Relative_Location; B : Material);
+     (C : Command_Computer; First : Relative_Location; Last : Relative_Location; B : Material);
 
-   function Get_Block_Info
-     (C : Command_Computer; L : Absolute_Location) return Material;
+   function Get_Block_Info (C : Command_Computer; L : Absolute_Location) return Material;
 
 private
 
