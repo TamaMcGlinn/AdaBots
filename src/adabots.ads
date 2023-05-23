@@ -48,11 +48,8 @@ package Adabots is
    procedure Select_Slot (T : Turtle; Slot : Turtle_Inventory_Slot);
    function Get_Item_Count (T : Turtle; Slot : Turtle_Inventory_Slot) return Stack_Count;
    function Get_Selected_Slot (T : Turtle) return Turtle_Inventory_Slot;
-
-   -- TODO really implement these two:
    function Get_Item_Detail (T : Turtle) return Item_Detail;
    function Get_Item_Detail (T : Turtle; Slot : Turtle_Inventory_Slot) return Item_Detail;
-
    function Get_Current_Tool (T : Turtle) return Tool_Info;
 
    --  https://tweaked.cc/module/turtle.html#v:drop
@@ -161,6 +158,7 @@ private
    end record;
 
    function Parse_Item_Details (Table : String) return Item_Detail;
+   function Parse_Tool_Selection (Table : String) return Tool_Info;
 
    type Command_Computer is new Ada.Finalization.Limited_Controlled with record
       Dispatcher : Adabots_Lua_Dispatcher.Lua_Dispatcher;

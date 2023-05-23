@@ -140,26 +140,9 @@ package body Adabots is
    end Get_Item_Detail;
 
    function Get_Current_Tool (T : Turtle) return Tool_Info is
-      Tool_Info : constant String := Raw_Function (T.Dispatcher, "turtle.getCurrentTool()");
-
-      package Types   is new JSON.Types (Long_Integer, Long_Float);
-      package Parsers is new JSON.Parsers (Types);
-
-      Parser : Parsers.Parser := Parsers.Create (Tool_Info);
-      Value  : constant Types.JSON_Value := Parser.Parse;
-
-      use Types;
-
-      pragma Assert (Value.Kind = Object_Kind);
-      pragma Assert (Value.Contains ("name"));
-      Name_Value : constant Types.JSON_Value := Value ("name");
-      pragma Assert (Name_Value.Kind = String_Kind);
-      pragma Assert (Value.Contains ("remaining_uses"));
-      Remaining_uses_Value : constant Types.JSON_Value := Value ("remaining_uses");
-      pragma Assert (Remaining_uses_Value.Kind = Integer_Kind);
+      Table : constant String := Raw_Function (T.Dispatcher, "turtle.getCurrentTool()");
    begin
-      return (Name => To_Unbounded_String (Name_Value.Image),
-      Remaining_uses => Tool_Uses_Count'Value(Remaining_uses_Value.Image));
+      return Parse_Tool_Selection (Table);
    end Get_Current_Tool;
 
    function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean is
@@ -390,14 +373,39 @@ package body Adabots is
 
    --  private:
 
+   package Types is new JSON.Types (Long_Integer, Long_Float);
+
    function Parse_Item_Details (Table : String) return Item_Detail is
-      Result : constant Item_Detail :=
-         (Count => 0,
-         Name  => To_Unbounded_String (""));
-      pragma Unreferenced (Table); -- TODO
+      use Types;
+      package Parsers is new JSON.Parsers (Types);
+      Parser : Parsers.Parser := Parsers.Create (Table);
+      Value : constant Types.JSON_Value := Parser.Parse;
+      pragma Assert (Value.Kind = Object_Kind);
+      pragma Assert (Value.Contains ("name"));
+      Name_Value : constant Types.JSON_Value := Value ("name");
+      pragma Assert (Name_Value.Kind = String_Kind);
+      pragma Assert (Value.Contains ("count"));
+      Count_Value : constant Types.JSON_Value := Value ("count");
+      pragma Assert (Count_Value.Kind = Integer_Kind);
    begin
-      return Result;
+      return (Name => To_Unbounded_String (Name_Value.Image), Count => Stack_Count'Value(Count_Value.Image));
    end Parse_Item_Details;
+
+   function Parse_Tool_Selection (Table : String) return Tool_Info is
+      use Types;
+      package Parsers is new JSON.Parsers (Types);
+      Parser : Parsers.Parser := Parsers.Create (Table);
+      Value : constant Types.JSON_Value := Parser.Parse;
+      pragma Assert (Value.Kind = Object_Kind);
+      pragma Assert (Value.Contains ("name"));
+      Name_Value : constant Types.JSON_Value := Value ("name");
+      pragma Assert (Name_Value.Kind = String_Kind);
+      pragma Assert (Value.Contains ("remaining_uses"));
+      Remaining_uses_Value : constant Types.JSON_Value := Value ("remaining_uses");
+      pragma Assert (Remaining_uses_Value.Kind = Integer_Kind);
+   begin
+      return (Name => To_Unbounded_String (Name_Value.Image), Remaining_uses => Tool_Uses_Count'Value(Remaining_uses_Value.Image));
+   end Parse_Tool_Selection;
 
    --  public:
 
