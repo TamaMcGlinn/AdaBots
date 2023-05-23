@@ -8,6 +8,8 @@ with "xmlada_input.gpr";
 with "xmlada_sax.gpr";
 with "xmlada_schema.gpr";
 with "xmlada_unicode.gpr";
+with "json.gpr";
+with "json_pretty_print.gpr";
 -- end auto-gpr-with --
 
 project Adabots is

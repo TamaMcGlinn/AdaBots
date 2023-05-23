@@ -13,6 +13,11 @@ package Adabots is
       Count : Stack_Count;
       Name  : Ada.Strings.Unbounded.Unbounded_String;
    end record;
+   type Tool_Uses_Count is range 0 .. 4000;
+   type Tool_Info is record
+      Remaining_Uses : Tool_Uses_Count;
+      Name  : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
 
    Default_Port : constant := 7_112;
 
@@ -48,10 +53,12 @@ package Adabots is
    function Get_Item_Detail (T : Turtle) return Item_Detail;
    function Get_Item_Detail (T : Turtle; Slot : Turtle_Inventory_Slot) return Item_Detail;
 
+   function Get_Current_Tool (T : Turtle) return Tool_Info;
+
    --  https://tweaked.cc/module/turtle.html#v:drop
    function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean;
---  function DropUp (T : Turtle; Amount : Stack_Count := 64) return Boolean;
---  function DropDown (T : Turtle; Amount : Stack_Count := 64) return Boolean;
+   --  function DropUp (T : Turtle; Amount : Stack_Count := 64) return Boolean;
+   --  function DropDown (T : Turtle; Amount : Stack_Count := 64) return Boolean;
 
    function Detect (T : Turtle) return Boolean;
    function Detect_Down (T : Turtle) return Boolean;
@@ -106,7 +113,7 @@ package Adabots is
    function Create_Command_Computer (Port : Integer) return Command_Computer;
 
    type Material is
-     (Grass,
+      (Grass,
       Planks,
       Air,
       Glass,
@@ -123,7 +130,7 @@ package Adabots is
    end record;
 
    function Image (P : Relative_Location) return String is
-     (P.X_Offset'Image & ", " & P.Y_Offset'Image & ", " & P.Z_Offset'Image);
+      (P.X_Offset'Image & ", " & P.Y_Offset'Image & ", " & P.Z_Offset'Image);
 
    function "+" (A, B : Relative_Location) return Relative_Location;
    function "-" (A, B : Relative_Location) return Relative_Location;
@@ -143,7 +150,7 @@ package Adabots is
    procedure Maybe_Set_Block (C : Command_Computer; L : Relative_Location; B : Material);
 
    procedure Set_Cube
-     (C : Command_Computer; First : Relative_Location; Last : Relative_Location; B : Material);
+      (C : Command_Computer; First : Relative_Location; Last : Relative_Location; B : Material);
 
    function Get_Block_Info (C : Command_Computer; L : Absolute_Location) return Material;
 

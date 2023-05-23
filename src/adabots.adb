@@ -1,5 +1,7 @@
 with Ada.Text_IO;
 with Aaa.Strings;
+with JSON.Parsers;
+with JSON.Types;
 
 package body Adabots is
    use Adabots_Lua_Dispatcher;
@@ -137,6 +139,29 @@ package body Adabots is
       return Parse_Item_Details (Raw_Function (T.Dispatcher, Command));
    end Get_Item_Detail;
 
+   function Get_Current_Tool (T : Turtle) return Tool_Info is
+      Tool_Info : constant String := Raw_Function (T.Dispatcher, "turtle.getCurrentTool()");
+
+      package Types   is new JSON.Types (Long_Integer, Long_Float);
+      package Parsers is new JSON.Parsers (Types);
+
+      Parser : Parsers.Parser := Parsers.Create (Tool_Info);
+      Value  : constant Types.JSON_Value := Parser.Parse;
+
+      use Types;
+
+      pragma Assert (Value.Kind = Object_Kind);
+      pragma Assert (Value.Contains ("name"));
+      Name_Value : constant Types.JSON_Value := Value ("name");
+      pragma Assert (Name_Value.Kind = String_Kind);
+      pragma Assert (Value.Contains ("remaining_uses"));
+      Remaining_uses_Value : constant Types.JSON_Value := Value ("remaining_uses");
+      pragma Assert (Remaining_uses_Value.Kind = Integer_Kind);
+   begin
+      return (Name => To_Unbounded_String (Name_Value.Image),
+      Remaining_uses => Tool_Uses_Count'Value(Remaining_uses_Value.Image));
+   end Get_Current_Tool;
+
    function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin
       return Boolean_Function (T.Dispatcher, "turtle.drop(" & Amount'Image & ")");
@@ -168,11 +193,11 @@ package body Adabots is
    end Detect_Right;
 
    function Inspect (T : Turtle) return Adabots_Nodetypes.Node is
-     (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspect()")));
+      (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspect()")));
    function Inspect_Down (T : Turtle) return Adabots_Nodetypes.Node is
-     (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspectDown()")));
+      (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspectDown()")));
    function Inspect_Up (T : Turtle) return Adabots_Nodetypes.Node is
-     (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspect()")));
+      (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspect()")));
 
    function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin
@@ -280,7 +305,7 @@ package body Adabots is
    end Place_Up;
 
    function Craft (T : Turtle; Amount : Positive_Stack_Count := 1) return Boolean is
-     (Boolean_Function (T.Dispatcher, "turtle.craft(" & Amount'Image & ")"));
+      (Boolean_Function (T.Dispatcher, "turtle.craft(" & Amount'Image & ")"));
 
    procedure Craft (T : Turtle; Amount : Positive_Stack_Count := 1) is
       Result : constant Boolean := Craft (T, Amount);
@@ -367,7 +392,7 @@ package body Adabots is
 
    function Parse_Item_Details (Table : String) return Item_Detail is
       Result : constant Item_Detail :=
-        (Count => 0,
+         (Count => 0,
          Name  => To_Unbounded_String (""));
       pragma Unreferenced (Table); -- TODO
    begin
@@ -389,7 +414,7 @@ package body Adabots is
    function "+" (A, B : Relative_Location) return Relative_Location is
    begin
       return
-        (X_Offset => A.X_Offset + B.X_Offset,
+         (X_Offset => A.X_Offset + B.X_Offset,
          Y_Offset => A.Y_Offset + B.Y_Offset,
          Z_Offset => A.Z_Offset + B.Z_Offset);
    end "+";
@@ -397,7 +422,7 @@ package body Adabots is
    function "-" (A, B : Relative_Location) return Relative_Location is
    begin
       return
-        (X_Offset => A.X_Offset - B.X_Offset,
+         (X_Offset => A.X_Offset - B.X_Offset,
          Y_Offset => A.Y_Offset - B.Y_Offset,
          Z_Offset => A.Z_Offset - B.Z_Offset);
    end "-";
@@ -405,7 +430,7 @@ package body Adabots is
    function "+" (A, B : Absolute_Location) return Absolute_Location is
    begin
       return
-        (X => A.X + B.X,
+         (X => A.X + B.X,
          Y => A.Y + B.Y,
          Z => A.Z + B.Z);
    end "+";
@@ -413,7 +438,7 @@ package body Adabots is
    function "+" (A : Absolute_Location; B : Relative_Location) return Absolute_Location is
    begin
       return
-        (X => A.X + B.X_Offset,
+         (X => A.X + B.X_Offset,
          Y => A.Y + B.Y_Offset,
          Z => A.Z + B.Z_Offset);
    end "+";
@@ -421,9 +446,9 @@ package body Adabots is
    function Set_Block (C : Command_Computer; L : Relative_Location; B : Material) return Boolean is
       -- for example: commands.setblock('~20', '~', '~20', 'planks')
       Command : constant String :=
-        "commands.setblock('~" & Non_Space_Image (L.X_Offset) & "', '~" &
-        Non_Space_Image (L.Y_Offset) & "', '~" & Non_Space_Image (L.Z_Offset) & "', '" & B'Image &
-        "')";
+         "commands.setblock('~" & Non_Space_Image (L.X_Offset) & "', '~" &
+         Non_Space_Image (L.Y_Offset) & "', '~" & Non_Space_Image (L.Z_Offset) & "', '" & B'Image &
+         "')";
    begin
       return Boolean_Function (C.Dispatcher, Command);
    end Set_Block;
@@ -436,17 +461,17 @@ package body Adabots is
    end Maybe_Set_Block;
 
    procedure Set_Cube
-     (C : Command_Computer; First : Relative_Location; Last : Relative_Location; B : Material)
+      (C : Command_Computer; First : Relative_Location; Last : Relative_Location; B : Material)
    is
    begin
       for Y in reverse First.Y_Offset .. Last.Y_Offset loop
          for X in First.X_Offset .. Last.X_Offset loop
             for Z in First.Z_Offset .. Last.Z_Offset loop
                Maybe_Set_Block
-                 (C,
+                  (C,
                   (X,
-                   Y,
-                   Z),
+                  Y,
+                  Z),
                   B);
             end loop;
          end loop;
@@ -455,10 +480,10 @@ package body Adabots is
 
    function Get_Block_Info (C : Command_Computer; L : Absolute_Location) return Material is
       Command : constant String :=
-        "commands.getBlockInfo(" & Non_Space_Image (L.X) & ", " & Non_Space_Image (L.Y) & ", " &
-        Non_Space_Image (L.Z) & ").name";
-      Return_Value : constant String := Raw_Function (C.Dispatcher, Command);
-      Prefix       : constant String := "minecraft:";
+         "commands.getBlockInfo(" & Non_Space_Image (L.X) & ", " & Non_Space_Image (L.Y) & ", " &
+         Non_Space_Image (L.Z) & ").name";
+         Return_Value : constant String := Raw_Function (C.Dispatcher, Command);
+         Prefix       : constant String := "minecraft:";
    begin
       return Material'Value (Aaa.Strings.Replace (Return_Value, Prefix, ""));
    end Get_Block_Info;
