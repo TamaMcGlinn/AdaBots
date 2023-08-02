@@ -11,10 +11,10 @@ project-files = ["adabots.gpr"]
 tags = ["learn", "ada", "minecraft", "computercraft", "robots", "teach", "children"]
 
 [[depends-on]]  # This line was added by `alr with`
-aws = "^23.0.0"  # This line was added by `alr with`
-
-[[depends-on]]  # This line was added by `alr with`
 aaa = "~0.2.3"  # This line was added by `alr with`
+
+[[depends-on]]
+utilada_curl = "^2.5.0"
 
 [[depends-on]]
 json = "^5.0.3"

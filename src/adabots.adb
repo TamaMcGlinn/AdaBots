@@ -1,5 +1,5 @@
 with Ada.Text_IO;
-with Aaa.Strings;
+with Util.Strings;
 with JSON.Parsers;
 with JSON.Types;
 
@@ -8,19 +8,7 @@ package body Adabots is
 
    -- private
 
-   function Non_Space_Image (I : Integer) return String is
-   begin
-      if I < 0
-      then
-         return I'Image;
-      else
-         declare
-            Image : constant String := I'Image;
-         begin
-            return Image (Image'First + 1 .. Image'Last);
-         end;
-      end if;
-   end Non_Space_Image;
+   function Image (I : Integer) return String renames Util.Strings.Image;
 
    --  public:
 
@@ -454,8 +442,8 @@ package body Adabots is
    function Set_Block (C : Command_Computer; L : Relative_Location; B : Material) return Boolean is
       -- for example: commands.setblock('~20', '~', '~20', 'planks')
       Command : constant String :=
-         "commands.setblock('~" & Non_Space_Image (L.X_Offset) & "', '~" &
-         Non_Space_Image (L.Y_Offset) & "', '~" & Non_Space_Image (L.Z_Offset) & "', '" & B'Image &
+         "commands.setblock('~" & Image (L.X_Offset) & "', '~" &
+         Image (L.Y_Offset) & "', '~" & Image (L.Z_Offset) & "', '" & B'Image &
          "')";
    begin
       return Boolean_Function (C.Dispatcher, Command);
@@ -488,12 +476,12 @@ package body Adabots is
 
    function Get_Block_Info (C : Command_Computer; L : Absolute_Location) return Material is
       Command : constant String :=
-         "commands.getBlockInfo(" & Non_Space_Image (L.X) & ", " & Non_Space_Image (L.Y) & ", " &
-         Non_Space_Image (L.Z) & ").name";
+         "commands.getBlockInfo(" & Image (L.X) & ", " & Image (L.Y) & ", " &
+         Image (L.Z) & ").name";
          Return_Value : constant String := Raw_Function (C.Dispatcher, Command);
          Prefix       : constant String := "minecraft:";
    begin
-      return Material'Value (Aaa.Strings.Replace (Return_Value, Prefix, ""));
+      return Material'Value (Util.Strings.Replace (Return_Value, Prefix, ""));
    end Get_Block_Info;
 
 end Adabots;
