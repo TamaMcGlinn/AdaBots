@@ -1,4 +1,4 @@
-with Ada.Text_IO;
+with Ada.Environment_Variables;
 with Util.Strings;
 with JSON.Parsers;
 with JSON.Types;
@@ -10,29 +10,21 @@ package body Adabots is
 
    function Image (I : Integer) return String renames Util.Strings.Image;
 
-   --  public:
+   -- public
 
-   function Ask_User_For_Port return Integer is
+   function Create_Dispatcher (Bot_Name : String) return Adabots_Lua_Dispatcher.Lua_Dispatcher is
+      Workspace_ID : constant Ada.Strings.Unbounded.Unbounded_String := Ada.Strings.Unbounded.To_Unbounded_String (Ada.Environment_Variables.Value ("WORKSPACE_ID"));
+      Unbounded_Bot_Name : constant Ada.Strings.Unbounded.Unbounded_String := Ada.Strings.Unbounded.To_Unbounded_String (Bot_Name);
    begin
-      Ada.Text_Io.Put_Line ("Which port should I output on? (default:" & Default_Port'Image & ")");
-      Ada.Text_Io.Put ("> ");
-      declare
-         T : constant String  := Ada.Text_Io.Get_Line;
-         P : constant Integer := (if T = "" then Default_Port else Integer'Value (T));
-      begin
-         return P;
-      end;
-   end Ask_User_For_Port;
+      return Create_Lua_Dispatcher (Workspace_ID, Unbounded_Bot_Name);
+   end;
 
    function Create_Turtle return Turtle is
    begin
-      return Create_Turtle (Default_Port);
+      return Create_Turtle ("");
    end Create_Turtle;
 
-   function Create_Turtle (Port : Integer) return Turtle is
-   begin
-      return (Ada.Finalization.Limited_Controlled with Dispatcher => Create_Lua_Dispatcher (Port));
-   end Create_Turtle;
+   function Create_Turtle (Bot_Name : String) return Turtle is (Ada.Finalization.Limited_Controlled with Dispatcher => Create_Dispatcher (Bot_Name));
 
    procedure Turn_Right (T : Turtle) is
    begin
@@ -399,13 +391,10 @@ package body Adabots is
 
    function Create_Command_Computer return Command_Computer is
    begin
-      return Create_Command_Computer (Default_Port);
+      return Create_Command_Computer ("");
    end Create_Command_Computer;
 
-   function Create_Command_Computer (Port : Integer) return Command_Computer is
-   begin
-      return (Ada.Finalization.Limited_Controlled with Dispatcher => Create_Lua_Dispatcher (Port));
-   end Create_Command_Computer;
+   function Create_Command_Computer (Bot_Name : String) return Command_Computer is (Ada.Finalization.Limited_Controlled with Dispatcher => Create_Dispatcher (Bot_Name));
 
    function "+" (A, B : Relative_Location) return Relative_Location is
    begin

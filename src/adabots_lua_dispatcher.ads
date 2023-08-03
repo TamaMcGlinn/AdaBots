@@ -1,8 +1,10 @@
+with Ada.Strings.Unbounded;
+
 package Adabots_Lua_Dispatcher is
 
    type Lua_Dispatcher is private;
 
-   function Create_Lua_Dispatcher (Workspace_ID : Integer) return Lua_Dispatcher;
+   function Create_Lua_Dispatcher (Workspace_ID : Ada.Strings.Unbounded.Unbounded_String; Bot_Name : Ada.Strings.Unbounded.Unbounded_String) return Lua_Dispatcher;
 
    function Raw_Function (T : Lua_Dispatcher; Lua_Code : String) return String;
    function Boolean_Function (T : Lua_Dispatcher; Lua_Code : String) return Boolean;
@@ -11,7 +13,8 @@ package Adabots_Lua_Dispatcher is
 private
 
    type Lua_Dispatcher is record
-      Workspace_ID : Integer;
+      Workspace_ID : Ada.Strings.Unbounded.Unbounded_String;
+      Bot_Name : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
 end Adabots_Lua_Dispatcher;

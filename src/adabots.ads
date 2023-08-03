@@ -19,11 +19,10 @@ package Adabots is
       Name  : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
-   Default_Port : constant := 7_112;
+   function Create_Dispatcher (Bot_Name : String) return Adabots_Lua_Dispatcher.Lua_Dispatcher;
 
-   function Ask_User_For_Port return Integer;
    function Create_Turtle return Turtle;
-   function Create_Turtle (Port : Integer) return Turtle;
+   function Create_Turtle (Bot_Name : String) return Turtle;
 
    -- Movement
    procedure Turn_Right (T : Turtle);
@@ -107,7 +106,7 @@ package Adabots is
    type Command_Computer is new Ada.Finalization.Limited_Controlled with private;
 
    function Create_Command_Computer return Command_Computer;
-   function Create_Command_Computer (Port : Integer) return Command_Computer;
+   function Create_Command_Computer (Bot_Name : String) return Command_Computer;
 
    type Material is
       (Grass,
