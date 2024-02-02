@@ -1,3 +1,4 @@
+with Ada.Environment_Variables;
 with Ada.Text_IO;
 with Util.Http.Clients.Curl;
 with Util.Http.Clients;
@@ -9,7 +10,9 @@ package body Adabots_Lua_Dispatcher is
          ((Workspace_ID => Workspace_ID, Bot_Name => Bot_Name));
 
    function Raw_Function (T : Lua_Dispatcher; Lua_Code : String) return String is
-      URI      : constant String := "http://adabots.net/proxy";
+      Default_URI : constant String := "http://adabots.net/instruction_proxy";
+      Custom_URI      : constant String := Ada.Environment_Variables.Value ("ADABOTS_PROXY_URL");
+      URI : constant String := (if Custom_URI /= "" then Custom_URI else Default_URI);
       Response : Util.Http.Clients.Response;
       Data : constant String := "{""workspaceId"": """ & Ada.Strings.Unbounded.To_String (T.Workspace_ID) &
          """, ""instruction"": """ & Lua_Code &
