@@ -472,5 +472,8 @@ package body Adabots is
    begin
       return Material'Value (Util.Strings.Replace (Return_Value, Prefix, ""));
    end Get_Block_Info;
-
+begin
+   if not Ada.Environment_Variables.Exists("WORKSPACE_ID") then
+      raise Program_Error with "No WORKSPACE_ID defined. Try `export WORKSPACE_ID=your_workspace_id` first.";
+   end if;
 end Adabots;
