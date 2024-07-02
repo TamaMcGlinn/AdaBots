@@ -11,20 +11,26 @@ package body Adabots_Lua_Dispatcher is
 
    function Raw_Function (T : Lua_Dispatcher; Lua_Code : String) return String is
       package Env renames Ada.Environment_Variables;
-      Default_URI : constant String := "http://adabots.net/instruction_proxy";
-      URI : constant String := (if Env.Exists ("ADABOTS_PROXY_URL") then Env.Value ("ADABOTS_PROXY_URL") else Default_URI);
+      -- GET request should look like this:
+      -- {{instructionProxyBaseUrl}}/instruction-proxy/put?workspaceId={{workspaceId}}&botName={{botName}}&instruction=turtle.down()
+      Default_Instruction_Proxy_Base_Url : constant String := "http://adabots.net";
+      Instruction_Proxy_Base_Url : constant String :=
+         (if Env.Exists ("INSTRUCTION_PROXY_BASE_URL") then
+              Env.Value ("INSTRUCTION_PROXY_BASE_URL") else
+              Default_Instruction_Proxy_Base_Url);
       Response : Util.Http.Clients.Response;
-      Data : constant String := "{""workspaceId"": """ & Ada.Strings.Unbounded.To_String (T.Workspace_ID) &
-         """, ""instruction"": """ & Lua_Code &
-         """, ""botName"": """ & Ada.Strings.Unbounded.To_String (T.Bot_Name) & """}";
+      Endpoint : constant String := Instruction_Proxy_Base_Url & "/instruction-proxy/put";
+      Get_Args : constant String := "workspaceId=" & Ada.Strings.Unbounded.To_String (T.Workspace_ID) &
+         "&botName=" & Ada.Strings.Unbounded.To_String (T.Bot_Name) &
+         "&instruction=" & Lua_Code;
+      Request : constant String := Endpoint & "?" & Get_Args;
    begin
       Util.HTTP.Clients.Curl.Register;
       declare
          Http     : Util.Http.Clients.Client;
       begin
          Ada.Text_IO.Put_Line ("Scheduled " & Lua_Code);
-         Http.Add_Header ("content-type", "application/json");
-         Http.Post (URI, Data, Response);
+         Http.Get (Request, Response);
          return Response.Get_Body;
       end;
    end Raw_Function;
