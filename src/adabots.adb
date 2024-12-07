@@ -87,8 +87,13 @@ package body Adabots is
       return Boolean_Function (T.Dispatcher, "turtle.placeUp()");
    end Place_Up;
 
+   function Trim_Left (Raw_Image : String) return String is
+   begin
+      return To_String (Trim(To_Unbounded_String (Raw_Image), Ada.Strings.Left));
+   end Trim_Left;
+
    procedure Select_Slot (T : Turtle; Slot : Turtle_Inventory_Slot) is
-      Command : constant String  := "turtle.select(" & Slot'Image & ")";
+      Command : constant String  := "turtle.select(" & Trim_Left(Slot'Image) & ")";
       Result  : constant Boolean := Boolean_Function (T.Dispatcher, Command);
    begin
       if Result = False
@@ -98,7 +103,7 @@ package body Adabots is
    end Select_Slot;
 
    function Get_Item_Count (T : Turtle; Slot : Turtle_Inventory_Slot) return Stack_Count is
-      Command : constant String := "turtle.getItemCount(" & Slot'Image & ")";
+      Command : constant String := "turtle.getItemCount(" & Trim_Left (Slot'Image) & ")";
       Result  : constant String := Raw_Function (T.Dispatcher, Command);
    begin
       return Stack_Count'Value (Result);
@@ -115,7 +120,7 @@ package body Adabots is
    end Get_Item_Detail;
 
    function Get_Item_Detail (T : Turtle; Slot : Turtle_Inventory_Slot) return Item_Detail is
-      Command : constant String := "turtle.getItemDetail(" & Slot'Image & ")";
+      Command : constant String := "turtle.getItemDetail(" & Trim_Left (Slot'Image) & ")";
    begin
       return Parse_Item_Details (Raw_Function (T.Dispatcher, Command));
    end Get_Item_Detail;
@@ -128,7 +133,7 @@ package body Adabots is
 
    function Drop (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin
-      return Boolean_Function (T.Dispatcher, "turtle.drop(" & Amount'Image & ")");
+      return Boolean_Function (T.Dispatcher, "turtle.drop(" & Trim_Left (Amount'Image) & ")");
    end Drop;
 
    function Detect (T : Turtle) return Boolean is
@@ -185,17 +190,17 @@ package body Adabots is
 
    function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin
-      return Boolean_Function (T.Dispatcher, "turtle.suck(" & Amount'Image & ")");
+      return Boolean_Function (T.Dispatcher, "turtle.suck(" & Trim_Left (Amount'Image) & ")");
    end Suck;
 
    function Suck_Down (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin
-      return Boolean_Function (T.Dispatcher, "turtle.suckDown(" & Amount'Image & ")");
+      return Boolean_Function (T.Dispatcher, "turtle.suckDown(" & Trim_Left (Amount'Image) & ")");
    end Suck_Down;
 
    function Suck_Up (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin
-      return Boolean_Function (T.Dispatcher, "turtle.suckUp(" & Amount'Image & ")");
+      return Boolean_Function (T.Dispatcher, "turtle.suckUp(" & Trim_Left (Amount'Image) & ")");
    end Suck_Up;
 
    procedure Forward (T : Turtle) is
@@ -289,14 +294,14 @@ package body Adabots is
    end Place_Up;
 
    function Craft (T : Turtle; Amount : Positive_Stack_Count := 1) return Boolean is
-      (Boolean_Function (T.Dispatcher, "turtle.craft(" & Amount'Image & ")"));
+      (Boolean_Function (T.Dispatcher, "turtle.craft(" & Trim_Left (Amount'Image) & ")"));
 
    procedure Craft (T : Turtle; Amount : Positive_Stack_Count := 1) is
       Result : constant Boolean := Craft (T, Amount);
    begin
       if Result = False
       then
-         raise Program_Error with "Turtle.Craft(" & Amount'Image & ") returned False";
+         raise Program_Error with "Turtle.Craft(" & Trim_Left (Amount'Image) & ") returned False";
       end if;
    end Craft;
 
@@ -305,7 +310,7 @@ package body Adabots is
    begin
       if Result = False
       then
-         raise Program_Error with "Turtle.Drop(" & Amount'Image & ") returned False";
+         raise Program_Error with "Turtle.Drop(" & Trim_Left (Amount'Image) & ") returned False";
       end if;
    end Drop;
 
@@ -453,7 +458,7 @@ package body Adabots is
       -- for example: commands.setblock('~20', '~', '~20', 'planks')
       Command : constant String :=
          "commands.setblock('~" & Image (L.X_Offset) & "', '~" &
-         Image (L.Y_Offset) & "', '~" & Image (L.Z_Offset) & "', '" & B'Image &
+         Image (L.Y_Offset) & "', '~" & Image (L.Z_Offset) & "', '" & Trim_Left (B'Image) &
          "')";
    begin
       return Boolean_Function (C.Dispatcher, Command);
