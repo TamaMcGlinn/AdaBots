@@ -2513,7 +2513,7 @@ package Adabots_Nodetypes is
       xpanes_pane_yellow,
       xpanes_pane_yellow_flat,
       xpanes_trapdoor_steel_bar,
-      xpanes_trapdoor_steel_bar_open,
+      xpanes_trapdoor_steel_bar_open
       );
 
    -- given minetest node identifier such as "adabots:turtle", returns corresponding enum value
