@@ -1,4 +1,5 @@
 with Ada.Environment_Variables;
+with Adabots_Exceptions;
 with Util.Strings;
 with JSON.Parsers;
 with JSON.Types;
@@ -156,11 +157,31 @@ package body Adabots is
    end Detect_Right;
 
    function Inspect (T : Turtle) return Adabots_Nodetypes.Node is
-      (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspect()")));
+   begin
+      return Adabots_Nodetypes.Convert (Inspect_String (T));
+   exception
+      when Adabots_Exceptions.Unknown_Nodetype =>
+         return Adabots_Nodetypes.Unknown;
+   end Inspect;
    function Inspect_Down (T : Turtle) return Adabots_Nodetypes.Node is
-      (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspectDown()")));
+   begin
+      return Adabots_Nodetypes.Convert (Inspect_Down_String (T));
+   exception
+      when Adabots_Exceptions.Unknown_Nodetype =>
+         return Adabots_Nodetypes.Unknown;
+   end Inspect_Down;
+         
    function Inspect_Up (T : Turtle) return Adabots_Nodetypes.Node is
-      (Adabots_Nodetypes.Convert (Raw_Function (T.Dispatcher, "turtle.inspect()")));
+   begin
+      return Adabots_Nodetypes.Convert (Inspect_Up_String (T));
+   exception
+      when Adabots_Exceptions.Unknown_Nodetype =>
+         return Adabots_Nodetypes.Unknown;
+   end Inspect_Up;
+
+   function Inspect_String (T : Turtle) return String is (Raw_Function (T.Dispatcher, "turtle.inspect()"));
+   function Inspect_Down_String (T : Turtle) return String is (Raw_Function (T.Dispatcher, "turtle.inspectDown()"));
+   function Inspect_Up_String (T : Turtle) return String is (Raw_Function (T.Dispatcher, "turtle.inspectUp()"));
 
    function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin

@@ -56,15 +56,27 @@ package Adabots is
    --  function DropUp (T : Turtle; Amount : Stack_Count := 64) return Boolean;
    --  function DropDown (T : Turtle; Amount : Stack_Count := 64) return Boolean;
 
+   -- return true if there is a non-air/water node there, or it is
+   -- otherwise blocked by an entity such as another bot or a large animal
    function Detect (T : Turtle) return Boolean;
    function Detect_Down (T : Turtle) return Boolean;
    function Detect_Up (T : Turtle) return Boolean;
    function Detect_Left (T : Turtle) return Boolean;
    function Detect_Right (T : Turtle) return Boolean;
 
+   -- return the type of block there, for example Air
+   -- can return Unknown if the type is not listed in
+   -- the Adabots Ada library, in which you should use
+   -- Inspect_String
    function Inspect (T : Turtle) return Adabots_Nodetypes.Node;
    function Inspect_Down (T : Turtle) return Adabots_Nodetypes.Node;
    function Inspect_Up (T : Turtle) return Adabots_Nodetypes.Node;
+
+   -- return raw string name of the node type there,
+   -- use this when the regular inspect returns unknown
+   function Inspect_String (T : Turtle) return String;
+   function Inspect_Down_String (T : Turtle) return String;
+   function Inspect_Up_String (T : Turtle) return String;
 
    function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean;
    function Suck_Down (T : Turtle; Amount : Stack_Count := 64) return Boolean;

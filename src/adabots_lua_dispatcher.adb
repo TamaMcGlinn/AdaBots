@@ -1,5 +1,7 @@
 with Ada.Environment_Variables;
 with Ada.Text_IO;
+with Adabots_Exceptions;
+with Ada.Exceptions;
 with Util.Http.Clients.Curl;
 with Util.Http.Clients;
 
@@ -8,6 +10,21 @@ package body Adabots_Lua_Dispatcher is
    function Create_Lua_Dispatcher
       (Workspace_ID : Ada.Strings.Unbounded.Unbounded_String; Bot_Name : Ada.Strings.Unbounded.Unbounded_String) return Lua_Dispatcher is
          ((Workspace_ID => Workspace_ID, Bot_Name => Bot_Name));
+
+   function Begins_With (Source, Pattern : String) return Boolean is
+   begin
+      return Pattern'Length <= Source'Length 
+        and then Source (Source'First .. Source'First + Pattern'Length - 1) = Pattern;
+   end Begins_With;
+
+   procedure Raise_Error (Error_String : String) is
+      use Adabots_Exceptions;
+   begin
+      if Begins_With (Error_String, "timeout") then
+         raise Instruction_Timeout with Error_String;
+      end if;
+      raise Unknown_Luanti_Error with Error_String;
+   end Raise_Error;
 
    function Raw_Function (T : Lua_Dispatcher; Lua_Code : String) return String is
       package Env renames Ada.Environment_Variables;
@@ -20,18 +37,35 @@ package body Adabots_Lua_Dispatcher is
               Default_Instruction_Proxy_Base_Url);
       Response : Util.Http.Clients.Response;
       Endpoint : constant String := Instruction_Proxy_Base_Url & "/instruction-proxy/put";
-      Get_Args : constant String := "workspaceId=" & Ada.Strings.Unbounded.To_String (T.Workspace_ID) &
-         "&botName=" & Ada.Strings.Unbounded.To_String (T.Bot_Name) &
-         "&instruction=" & Lua_Code;
+      Get_Args : constant String :=
+        "workspaceId=" & Ada.Strings.Unbounded.To_String (T.Workspace_Id) &
+        "&botName=" & Ada.Strings.Unbounded.To_String (T.Bot_Name) &
+        "&instruction=" & Lua_Code;
       Request : constant String := Endpoint & "?" & Get_Args;
    begin
       Util.HTTP.Clients.Curl.Register;
       declare
          Http     : Util.Http.Clients.Client;
       begin
+         Util.Http.Clients.Set_Timeout (Http, 2.0);
          Ada.Text_IO.Put_Line ("Scheduled " & Lua_Code);
-         Http.Get (Request, Response);
-         return Response.Get_Body;
+         begin
+            Http.Get (Request, Response);
+         exception
+         -- this happens when the timeout set above is lower than the server timeout
+         -- if the server timeout is shorter, then it responds to us with an error
+         -- which we parse in Raise_Error and also raise Instruction_Timeout
+         when E : UTIL.HTTP.CLIENTS.CONNECTION_ERROR =>
+            raise Adabots_Exceptions.Instruction_Timeout with Ada.Exceptions.Exception_Message(E);
+         end;
+         declare
+            Response_Body : constant String := Response.Get_Body;
+         begin
+            if Begins_With (Response_Body, "error: ") then
+               Raise_Error (Response_Body (8 .. Response_Body'Last));
+            end if;
+            return Response_Body;
+         end;
       end;
    end Raw_Function;
 
