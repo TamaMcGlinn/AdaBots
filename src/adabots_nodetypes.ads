@@ -3293,7 +3293,7 @@ package Adabots_Nodetypes is
       Xpanes_Trapdoor_Steel_Bar,
       Xpanes_Trapdoor_Steel_Bar_Open);
 
-      -- given minetest node identifier such as "adabots:turtle", returns corresponding enum value
+   -- given minetest node identifier such as "adabots:turtle", returns corresponding enum value
    function Convert (Value : String) return Node;
 
    -- given Ada node type enum, returns minetest node identifier such as "adabots:turtle"
