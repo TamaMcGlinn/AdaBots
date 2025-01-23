@@ -35,10 +35,16 @@ package body Adabots_Lua_Dispatcher is
          (if Env.Exists ("INSTRUCTION_PROXY_BASE_URL") then
               Env.Value ("INSTRUCTION_PROXY_BASE_URL") else
               Default_Instruction_Proxy_Base_Url);
+      Default_UserId : constant String := "undefined";
+      User_Id : constant String :=
+         (if Env.Exists ("CODER_WORKSPACE_OWNER_ID") then
+              Env.Value ("CODER_WORKSPACE_OWNER_ID") else
+              Default_UserId);
       Response : Util.Http.Clients.Response;
       Endpoint : constant String := Instruction_Proxy_Base_Url & "/instruction-proxy/put";
       Get_Args : constant String :=
         "workspaceId=" & Ada.Strings.Unbounded.To_String (T.Workspace_Id) &
+        "&userId=" & User_Id &
         "&botName=" & Ada.Strings.Unbounded.To_String (T.Bot_Name) &
         "&instruction=" & Lua_Code;
       Request : constant String := Endpoint & "?" & Get_Args;
