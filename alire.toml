@@ -1,6 +1,7 @@
 name = "adabots"
 description = "Learn Ada by programming Minecraft robots"
 version = "2.0.0"
+website = "adabots.net"
 
 authors = ["Tama McGlinn"]
 maintainers = ["Tama McGlinn <t.mcglinn@gmail.com>"]
