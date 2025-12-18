@@ -44,14 +44,16 @@ You will need:
 - A minecraft or minetest installation
 - An Ada development environment
 
-## Minecraft / Minetest install instructions
+## Minecraft / Luanti (Minetest) install instructions
 
-You can use either Minecraft or Minetest to run a commandlistener for AdaBots programs.
+You can use either Minecraft or Luanti (formerly Minetest) to run a commandlistener for AdaBots programs.
 
-I recommend using Minecraft for this; either connect to a server with ComputerCraft already installed,
-or [install Adabots in single-player](docs/minecraft_installation.md).
-Currently, the minetest implementation is early Work-In-Progress; movement, digging and block placement works, but expect bugs.
-[Minetest installation instructions here](docs/minetest_installation.md).
+Luanti is recommended, and is fully supported and also what adabots.net uses. 
+[Luanti (minetest) installation instructions here](docs/minetest_installation.md).
+
+I do not recommend Minecraft, because it is closed source and Microsoft has been adding a lot of bloat
+to it in recent years. However, it probably still works if you are willing to debug old versions of AdaBots.
+Use the [install instructions for Adabots in single-player](docs/minecraft_installation.md) at your own peril.
 
 ## Ada environment
 
