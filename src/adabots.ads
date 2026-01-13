@@ -7,16 +7,16 @@ package Adabots is
 
    type Turtle is new Ada.Finalization.Limited_Controlled with private;
    type Turtle_Inventory_Slot is range 1 .. 16;
-   type Stack_Count is range 0 .. 64;
-   type Positive_Stack_Count is range 1 .. 64;
+   type Stack_Count is range 0 .. 65_535;
+   type Positive_Stack_Count is range 1 .. 65_535;
    type Item_Detail is record
       Count : Stack_Count;
       Name  : Ada.Strings.Unbounded.Unbounded_String;
    end record;
-   type Tool_Uses_Count is range 0 .. 4000;
+   type Tool_Uses_Count is range 0 .. 4_000;
    type Tool_Info is record
       Remaining_Uses : Tool_Uses_Count;
-      Name  : Ada.Strings.Unbounded.Unbounded_String;
+      Name           : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    function Create_Dispatcher (Bot_Name : String) return Adabots_Lua_Dispatcher.Lua_Dispatcher;
@@ -121,7 +121,7 @@ package Adabots is
    function Create_Command_Computer (Bot_Name : String) return Command_Computer;
 
    type Material is
-      (Grass,
+     (Grass,
       Planks,
       Air,
       Glass,
@@ -138,7 +138,7 @@ package Adabots is
    end record;
 
    function Image (P : Relative_Location) return String is
-      (P.X_Offset'Image & ", " & P.Y_Offset'Image & ", " & P.Z_Offset'Image);
+     (P.X_Offset'Image & ", " & P.Y_Offset'Image & ", " & P.Z_Offset'Image);
 
    function "+" (A, B : Relative_Location) return Relative_Location;
    function "-" (A, B : Relative_Location) return Relative_Location;
@@ -158,7 +158,7 @@ package Adabots is
    procedure Maybe_Set_Block (C : Command_Computer; L : Relative_Location; B : Material);
 
    procedure Set_Cube
-      (C : Command_Computer; First : Relative_Location; Last : Relative_Location; B : Material);
+     (C : Command_Computer; First : Relative_Location; Last : Relative_Location; B : Material);
 
    function Get_Block_Info (C : Command_Computer; L : Absolute_Location) return Material;
 
