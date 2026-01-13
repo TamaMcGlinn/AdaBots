@@ -1,8 +1,8 @@
 with Ada.Environment_Variables;
 with Adabots_Exceptions;
 with Util.Strings;
-with JSON.Parsers;
-with JSON.Types;
+with Json.Parsers;
+with Json.Types;
 
 package body Adabots is
    use Adabots_Lua_Dispatcher;
@@ -14,18 +14,22 @@ package body Adabots is
    -- public
 
    function Create_Dispatcher (Bot_Name : String) return Adabots_Lua_Dispatcher.Lua_Dispatcher is
-      Workspace_ID : constant Ada.Strings.Unbounded.Unbounded_String := Ada.Strings.Unbounded.To_Unbounded_String (Ada.Environment_Variables.Value ("WORKSPACE_ID"));
-      Unbounded_Bot_Name : constant Ada.Strings.Unbounded.Unbounded_String := Ada.Strings.Unbounded.To_Unbounded_String (Bot_Name);
+      Workspace_Id       : constant Ada.Strings.Unbounded.Unbounded_String :=
+        Ada.Strings.Unbounded.To_Unbounded_String
+          (Ada.Environment_Variables.Value ("WORKSPACE_ID"));
+      Unbounded_Bot_Name : constant Ada.Strings.Unbounded.Unbounded_String :=
+        Ada.Strings.Unbounded.To_Unbounded_String (Bot_Name);
    begin
-      return Create_Lua_Dispatcher (Workspace_ID, Unbounded_Bot_Name);
-   end;
+      return Create_Lua_Dispatcher (Workspace_Id, Unbounded_Bot_Name);
+   end Create_Dispatcher;
 
    function Create_Turtle return Turtle is
    begin
       return Create_Turtle ("");
    end Create_Turtle;
 
-   function Create_Turtle (Bot_Name : String) return Turtle is (Ada.Finalization.Limited_Controlled with Dispatcher => Create_Dispatcher (Bot_Name));
+   function Create_Turtle (Bot_Name : String) return Turtle is
+     (Ada.Finalization.Limited_Controlled with Dispatcher => Create_Dispatcher (Bot_Name));
 
    procedure Turn_Right (T : Turtle) is
    begin
@@ -89,11 +93,11 @@ package body Adabots is
 
    function Trim_Left (Raw_Image : String) return String is
    begin
-      return To_String (Trim(To_Unbounded_String (Raw_Image), Ada.Strings.Left));
+      return To_String (Trim (To_Unbounded_String (Raw_Image), Ada.Strings.Left));
    end Trim_Left;
 
    procedure Select_Slot (T : Turtle; Slot : Turtle_Inventory_Slot) is
-      Command : constant String  := "turtle.select(" & Trim_Left(Slot'Image) & ")";
+      Command : constant String  := "turtle.select(" & Trim_Left (Slot'Image) & ")";
       Result  : constant Boolean := Boolean_Function (T.Dispatcher, Command);
    begin
       if Result = False
@@ -175,7 +179,7 @@ package body Adabots is
       when Adabots_Exceptions.Unknown_Nodetype =>
          return Adabots_Nodetypes.Unknown;
    end Inspect_Down;
-         
+
    function Inspect_Up (T : Turtle) return Adabots_Nodetypes.Node is
    begin
       return Adabots_Nodetypes.Convert (Inspect_Up_String (T));
@@ -184,9 +188,24 @@ package body Adabots is
          return Adabots_Nodetypes.Unknown;
    end Inspect_Up;
 
-   function Inspect_String (T : Turtle) return String is (Raw_Function (T.Dispatcher, "turtle.inspect()"));
-   function Inspect_Down_String (T : Turtle) return String is (Raw_Function (T.Dispatcher, "turtle.inspectDown()"));
-   function Inspect_Up_String (T : Turtle) return String is (Raw_Function (T.Dispatcher, "turtle.inspectUp()"));
+   function Inspect_String (T : Turtle) return String is
+     (Raw_Function (T.Dispatcher, "turtle.inspect()"));
+   function Inspect_Down_String (T : Turtle) return String is
+     (Raw_Function (T.Dispatcher, "turtle.inspectDown()"));
+   function Inspect_Up_String (T : Turtle) return String is
+     (Raw_Function (T.Dispatcher, "turtle.inspectUp()"));
+
+   function Look (T : Turtle; Depth : Positive := 8) return Node_Location_Vector is
+     (Convert (Raw_Function (T.Dispatcher, "turtle.look(" & Trim_Left (Depth'Image) & ")")));
+   function Look_Down (T : Turtle; Depth : Positive := 8) return Node_Location_Vector is
+     (Convert (Raw_Function (T.Dispatcher, "turtle.lookDown(" & Trim_Left (Depth'Image) & ")")));
+   function Look_Up (T : Turtle; Depth : Positive := 8) return Node_Location_Vector is
+     (Convert (Raw_Function (T.Dispatcher, "turtle.lookUp(" & Trim_Left (Depth'Image) & ")")));
+
+   function Get_Direction (T : Turtle) return Direction is
+     (Direction'Value (Raw_Function (T.Dispatcher, "turtle.getDirection()")));
+   function Get_Position (T : Turtle) return Location is
+     (Convert (Raw_Function (T.Dispatcher, "turtle.getPosition()")));
 
    function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean is
    begin
@@ -294,7 +313,7 @@ package body Adabots is
    end Place_Up;
 
    function Craft (T : Turtle; Amount : Positive_Stack_Count := 1) return Boolean is
-      (Boolean_Function (T.Dispatcher, "turtle.craft(" & Trim_Left (Amount'Image) & ")"));
+     (Boolean_Function (T.Dispatcher, "turtle.craft(" & Trim_Left (Amount'Image) & ")"));
 
    procedure Craft (T : Turtle; Amount : Positive_Stack_Count := 1) is
       Result : constant Boolean := Craft (T, Amount);
@@ -304,6 +323,29 @@ package body Adabots is
          raise Program_Error with "Turtle.Craft(" & Trim_Left (Amount'Image) & ") returned False";
       end if;
    end Craft;
+
+   function Equip_Tool (T : Turtle; Slot : Turtle_Inventory_Slot) return Boolean is
+     (Boolean_Function (T.Dispatcher, "turtle.equip_tool(" & Trim_Left (Slot'Image) & ")"));
+   function Equip_Tool (T : Turtle) return Boolean is
+     (Boolean_Function (T.Dispatcher, "turtle.equip_tool(0)"));
+   procedure Equip_Tool (T : Turtle; Slot : Turtle_Inventory_Slot) is
+      Result : constant Boolean := Equip_Tool (T, Slot);
+   begin
+      if Result = False
+      then
+         raise Program_Error
+           with "Turtle.Equip_Tool (" & Trim_Left (Slot'Image) & ") returned False";
+      end if;
+   end Equip_Tool;
+
+   procedure Equip_Tool (T : Turtle) is
+      Result : constant Boolean := Equip_Tool (T);
+   begin
+      if Result = False
+      then
+         raise Program_Error with "Turtle.Equip_Tool returned False";
+      end if;
+   end Equip_Tool;
 
    procedure Drop (T : Turtle; Amount : Stack_Count := 64) is
       Result : constant Boolean := Drop (T, Amount);
@@ -379,39 +421,84 @@ package body Adabots is
 
    --  private:
 
-   package Types is new JSON.Types (Long_Integer, Long_Float);
+   package Types is new Json.Types (Long_Integer, Long_Float);
 
    function Parse_Item_Details (Table : String) return Item_Detail is
       use Types;
-      package Parsers is new JSON.Parsers (Types);
-      Parser : Parsers.Parser := Parsers.Create (Table);
-      Value : constant Types.JSON_Value := Parser.Parse;
+      package Parsers is new Json.Parsers (Types);
+      Parser : Parsers.Parser            := Parsers.Create (Table);
+      Value  : constant Types.Json_Value := Parser.Parse;
       pragma Assert (Value.Kind = Object_Kind);
       pragma Assert (Value.Contains ("name"));
-      Name_Value : constant Types.JSON_Value := Value ("name");
+      Name_Value : constant Types.Json_Value := Value ("name");
       pragma Assert (Name_Value.Kind = String_Kind);
       pragma Assert (Value.Contains ("count"));
-      Count_Value : constant Types.JSON_Value := Value ("count");
+      Count_Value : constant Types.Json_Value := Value ("count");
       pragma Assert (Count_Value.Kind = Integer_Kind);
    begin
-      return (Name => To_Unbounded_String (Name_Value.Image), Count => Stack_Count'Value(Count_Value.Image));
+      return
+        (Name  => To_Unbounded_String (Name_Value.Image),
+         Count => Stack_Count'Value (Count_Value.Image));
    end Parse_Item_Details;
 
    function Parse_Tool_Selection (Table : String) return Tool_Info is
       use Types;
-      package Parsers is new JSON.Parsers (Types);
-      Parser : Parsers.Parser := Parsers.Create (Table);
-      Value : constant Types.JSON_Value := Parser.Parse;
+      package Parsers is new Json.Parsers (Types);
+      Parser : Parsers.Parser            := Parsers.Create (Table);
+      Value  : constant Types.Json_Value := Parser.Parse;
       pragma Assert (Value.Kind = Object_Kind);
       pragma Assert (Value.Contains ("name"));
-      Name_Value : constant Types.JSON_Value := Value ("name");
+      Name_Value : constant Types.Json_Value := Value ("name");
       pragma Assert (Name_Value.Kind = String_Kind);
       pragma Assert (Value.Contains ("remaining_uses"));
-      Remaining_uses_Value : constant Types.JSON_Value := Value ("remaining_uses");
-      pragma Assert (Remaining_uses_Value.Kind = Integer_Kind);
+      Remaining_Uses_Value : constant Types.Json_Value := Value ("remaining_uses");
+      pragma Assert (Remaining_Uses_Value.Kind = Integer_Kind);
    begin
-      return (Name => To_Unbounded_String (Name_Value.Image), Remaining_uses => Tool_Uses_Count'Value(Remaining_uses_Value.Image));
+      return
+        (Name           => To_Unbounded_String (Name_Value.Image),
+         Remaining_Uses => Tool_Uses_Count'Value (Remaining_Uses_Value.Image));
    end Parse_Tool_Selection;
+
+   function Convert (Location_Value : Types.Json_Value) return Location is
+   begin
+      return
+        (X => Location_Value ("x").Value,
+         Y => Location_Value ("y").Value,
+         Z => Location_Value ("z").Value);
+   end Convert;
+
+   function Convert (Table : String) return Location is
+      use Types;
+      package Parsers is new Json.Parsers (Types);
+      Parser : Parsers.Parser            := Parsers.Create (Table);
+      Value  : constant Types.Json_Value := Parser.Parse;
+   begin
+      return Convert (Value);
+   end Convert;
+
+   function Convert (Table : String) return Node_Location_Vector is
+      use Types;
+      package Parsers is new Json.Parsers (Types);
+      Parser : Parsers.Parser            := Parsers.Create (Table);
+      Value  : constant Types.Json_Value := Parser.Parse;
+      Result : Node_Location_Vector;
+   begin
+      for Element of Value loop
+         declare
+            Location_Value   : constant Types.Json_Value       := Element (1);
+            Quoted_Node_Name : constant String                 := Element (2).Image;
+            Parsed_Node      : constant Adabots_Nodetypes.Node :=
+              Adabots_Nodetypes.Convert
+                (Quoted_Node_Name (Quoted_Node_Name'First + 1 .. Quoted_Node_Name'Last - 1));
+         begin
+            Node_Location_Vectors.Append
+              (Result,
+               (Position  => Convert (Location_Value),
+                Node_Type => Parsed_Node));
+         end;
+      end loop;
+      return Result;
+   end Convert;
 
    --  public:
 
@@ -420,12 +507,13 @@ package body Adabots is
       return Create_Command_Computer ("");
    end Create_Command_Computer;
 
-   function Create_Command_Computer (Bot_Name : String) return Command_Computer is (Ada.Finalization.Limited_Controlled with Dispatcher => Create_Dispatcher (Bot_Name));
+   function Create_Command_Computer (Bot_Name : String) return Command_Computer is
+     (Ada.Finalization.Limited_Controlled with Dispatcher => Create_Dispatcher (Bot_Name));
 
    function "+" (A, B : Relative_Location) return Relative_Location is
    begin
       return
-         (X_Offset => A.X_Offset + B.X_Offset,
+        (X_Offset => A.X_Offset + B.X_Offset,
          Y_Offset => A.Y_Offset + B.Y_Offset,
          Z_Offset => A.Z_Offset + B.Z_Offset);
    end "+";
@@ -433,7 +521,7 @@ package body Adabots is
    function "-" (A, B : Relative_Location) return Relative_Location is
    begin
       return
-         (X_Offset => A.X_Offset - B.X_Offset,
+        (X_Offset => A.X_Offset - B.X_Offset,
          Y_Offset => A.Y_Offset - B.Y_Offset,
          Z_Offset => A.Z_Offset - B.Z_Offset);
    end "-";
@@ -441,7 +529,7 @@ package body Adabots is
    function "+" (A, B : Absolute_Location) return Absolute_Location is
    begin
       return
-         (X => A.X + B.X,
+        (X => A.X + B.X,
          Y => A.Y + B.Y,
          Z => A.Z + B.Z);
    end "+";
@@ -449,7 +537,7 @@ package body Adabots is
    function "+" (A : Absolute_Location; B : Relative_Location) return Absolute_Location is
    begin
       return
-         (X => A.X + B.X_Offset,
+        (X => A.X + B.X_Offset,
          Y => A.Y + B.Y_Offset,
          Z => A.Z + B.Z_Offset);
    end "+";
@@ -457,9 +545,8 @@ package body Adabots is
    function Set_Block (C : Command_Computer; L : Relative_Location; B : Material) return Boolean is
       -- for example: commands.setblock('~20', '~', '~20', 'planks')
       Command : constant String :=
-         "commands.setblock('~" & Image (L.X_Offset) & "', '~" &
-         Image (L.Y_Offset) & "', '~" & Image (L.Z_Offset) & "', '" & Trim_Left (B'Image) &
-         "')";
+        "commands.setblock('~" & Image (L.X_Offset) & "', '~" & Image (L.Y_Offset) & "', '~" &
+        Image (L.Z_Offset) & "', '" & Trim_Left (B'Image) & "')";
    begin
       return Boolean_Function (C.Dispatcher, Command);
    end Set_Block;
@@ -472,17 +559,17 @@ package body Adabots is
    end Maybe_Set_Block;
 
    procedure Set_Cube
-      (C : Command_Computer; First : Relative_Location; Last : Relative_Location; B : Material)
+     (C : Command_Computer; First : Relative_Location; Last : Relative_Location; B : Material)
    is
    begin
       for Y in reverse First.Y_Offset .. Last.Y_Offset loop
          for X in First.X_Offset .. Last.X_Offset loop
             for Z in First.Z_Offset .. Last.Z_Offset loop
                Maybe_Set_Block
-                  (C,
+                 (C,
                   (X,
-                  Y,
-                  Z),
+                   Y,
+                   Z),
                   B);
             end loop;
          end loop;
@@ -490,16 +577,17 @@ package body Adabots is
    end Set_Cube;
 
    function Get_Block_Info (C : Command_Computer; L : Absolute_Location) return Material is
-      Command : constant String :=
-         "commands.getBlockInfo(" & Image (L.X) & ", " & Image (L.Y) & ", " &
-         Image (L.Z) & ").name";
-         Return_Value : constant String := Raw_Function (C.Dispatcher, Command);
-         Prefix       : constant String := "minecraft:";
+      Command      : constant String :=
+        "commands.getBlockInfo(" & Image (L.X) & ", " & Image (L.Y) & ", " & Image (L.Z) & ").name";
+      Return_Value : constant String := Raw_Function (C.Dispatcher, Command);
+      Prefix       : constant String := "minecraft:";
    begin
       return Material'Value (Util.Strings.Replace (Return_Value, Prefix, ""));
    end Get_Block_Info;
 begin
-   if not Ada.Environment_Variables.Exists("WORKSPACE_ID") then
-      raise Program_Error with "No WORKSPACE_ID defined. Try `export WORKSPACE_ID=your_workspace_id` first.";
+   if not Ada.Environment_Variables.Exists ("WORKSPACE_ID")
+   then
+      raise Program_Error
+        with "No WORKSPACE_ID defined. Try `export WORKSPACE_ID=your_workspace_id` first.";
    end if;
 end Adabots;

@@ -1,5 +1,6 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Finalization;
+with Ada.Containers.Vectors;
 with Adabots_Lua_Dispatcher;
 with Adabots_Nodetypes;
 
@@ -18,6 +19,27 @@ package Adabots is
       Remaining_Uses : Tool_Uses_Count;
       Name           : Ada.Strings.Unbounded.Unbounded_String;
    end record;
+
+   type Location is record
+      X : Long_Integer;
+      Y : Long_Integer;
+      Z : Long_Integer;
+   end record;
+   -- type Location_Offset is new Location;
+   type Node_Location is record
+      Position  : Location;
+      Node_Type : Adabots_Nodetypes.Node;
+   end record;
+
+   type Direction is (North, East, South, West);
+
+   package Node_Location_Vectors is new Ada.Containers.Vectors
+     (Index_Type => Natural, Element_Type => Node_Location);
+   subtype Node_Location_Vector is Node_Location_Vectors.Vector;
+
+    package Node_Type_Vectors is new Ada.Containers.Vectors
+      (Index_Type => Natural, Element_Type => Adabots_Nodetypes.Node);
+    subtype Node_Vector is Node_Location_Vectors.Vector;
 
    function Create_Dispatcher (Bot_Name : String) return Adabots_Lua_Dispatcher.Lua_Dispatcher;
 
@@ -78,6 +100,17 @@ package Adabots is
    function Inspect_Down_String (T : Turtle) return String;
    function Inspect_Up_String (T : Turtle) return String;
 
+   -- orientation
+
+   function Look (T : Turtle; Depth : Positive := 8) return Node_Location_Vector;
+   function Look_Down (T : Turtle; Depth : Positive := 8) return Node_Location_Vector;
+   function Look_Up (T : Turtle; Depth : Positive := 8) return Node_Location_Vector;
+
+   function Get_Direction (T : Turtle) return Direction;
+   function Get_Position (T : Turtle) return Location;
+
+   -- pick up items from world
+
    function Suck (T : Turtle; Amount : Stack_Count := 64) return Boolean;
    function Suck_Down (T : Turtle; Amount : Stack_Count := 64) return Boolean;
    function Suck_Up (T : Turtle; Amount : Stack_Count := 64) return Boolean;
@@ -99,6 +132,11 @@ package Adabots is
 
    function Craft (T : Turtle; Amount : Positive_Stack_Count := 1) return Boolean;
    procedure Craft (T : Turtle; Amount : Positive_Stack_Count := 1);
+
+   function Equip_Tool (T : Turtle; Slot : Turtle_Inventory_Slot) return Boolean;
+   function Equip_Tool (T : Turtle) return Boolean;
+   procedure Equip_Tool (T : Turtle; Slot : Turtle_Inventory_Slot);
+   procedure Equip_Tool (T : Turtle);
 
    procedure Drop (T : Turtle; Amount : Stack_Count := 64);
 
@@ -170,6 +208,8 @@ private
 
    function Parse_Item_Details (Table : String) return Item_Detail;
    function Parse_Tool_Selection (Table : String) return Tool_Info;
+   function Convert (Table : String) return Node_Location_Vector;
+   function Convert (Table : String) return Location;
 
    type Command_Computer is new Ada.Finalization.Limited_Controlled with record
       Dispatcher : Adabots_Lua_Dispatcher.Lua_Dispatcher;
