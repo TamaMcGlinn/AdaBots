@@ -41,9 +41,10 @@ package Adabots is
      (Index_Type => Natural, Element_Type => Node_Location);
    subtype Node_Location_Vector is Node_Location_Vectors.Vector;
 
+   use type Adabots_Nodetypes.Node;
    package Node_Type_Vectors is new Ada.Containers.Vectors
      (Index_Type => Natural, Element_Type => Adabots_Nodetypes.Node);
-   subtype Node_Vector is Node_Location_Vectors.Vector;
+   subtype Node_Vector is Node_Type_Vectors.Vector;
 
    function Create_Dispatcher (Bot_Name : String) return Adabots_Lua_Dispatcher.Lua_Dispatcher;
 
