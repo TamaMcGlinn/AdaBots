@@ -31,15 +31,19 @@ package Adabots is
       Node_Type : Adabots_Nodetypes.Node;
    end record;
 
-   type Direction is (North, East, South, West);
+   type Direction is
+     (North,
+      East,
+      South,
+      West);
 
    package Node_Location_Vectors is new Ada.Containers.Vectors
      (Index_Type => Natural, Element_Type => Node_Location);
    subtype Node_Location_Vector is Node_Location_Vectors.Vector;
 
-    package Node_Type_Vectors is new Ada.Containers.Vectors
-      (Index_Type => Natural, Element_Type => Adabots_Nodetypes.Node);
-    subtype Node_Vector is Node_Location_Vectors.Vector;
+   package Node_Type_Vectors is new Ada.Containers.Vectors
+     (Index_Type => Natural, Element_Type => Adabots_Nodetypes.Node);
+   subtype Node_Vector is Node_Location_Vectors.Vector;
 
    function Create_Dispatcher (Bot_Name : String) return Adabots_Lua_Dispatcher.Lua_Dispatcher;
 
